@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /// @title A contract which manages and keeps track of all the different warranty cards.
 /// @author Adnan Hashmi
-/// @notice For now this contract only mints a Soulbound NFT
+/// @notice For now this contract does nothing
 
 contract WarrantyMarket is ReentrancyGuard{
 
