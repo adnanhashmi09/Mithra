@@ -17,17 +17,22 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     /// @dev state variables
     Counters.Counter private _tokenIdCounter; // keeps track of the ids of warranty cards
+    address approvedMarketAddress;
+    address private contractOwner;
     mapping(string => uint256) public warrantyCount; // to track only one warranty card per ipfs hash
     mapping(uint256 => bool) private hasWarrantyStarted;
 
-    struct WarrantyPeriod{
+    struct WarrantyPeriod {
         uint256 startTime;
         uint256 length;
     }
 
     mapping(uint256 => WarrantyPeriod) private warrantyPeriod;
 
-    constructor(string memory tokenName, string memory tokenSymbol, uint256 warrantyLength) ERC721(tokenName, tokenSymbol) {}
+    constructor(string memory tokenName, string memory tokenSymbol, address _approvedMarketAddress) ERC721(tokenName, tokenSymbol) {
+        approvedMarketAddress = _approvedMarketAddress;
+        contractOwner = msg.sender;
+    }
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
@@ -40,6 +45,24 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     event WarrantyPeriodStarted(uint256 tokenId, uint256 startTime, uint256 length);
     event Attest(address indexed to, uint256 tokenId);
     event Revoke(address indexed to, uint256 tokenId);
+    event MarketTranfer(address indexed to, uint256 tokenId);
+
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+     * @dev Following are modifiers
+       @notice Probably not needed
+    */ 
+
+    /** 
+     * @dev The following modifier allows the market or the owner to call the function
+    */ 
+
+    modifier onlyOwnerAndMarket{
+        require(owner() == _msgSender() || approvedMarketAddress == _msgSender(), "Ownable: caller is not the owner");
+        _;
+    }
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
@@ -81,12 +104,13 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     */ 
 
-    function startWarrantyPeriod(uint256 tokenId) public onlyOwner {
+    function startWarrantyPeriod(uint256 tokenId, address originSender) external {
+        require(originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
         require(hasWarrantyStarted[tokenId] == false, "Warranty has already started");
         require(warrantyPeriod[tokenId].startTime == 0, "Warranty has already started");
         require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
-
-        hasWarrantyStarted[tokenId] = true;
+        
+        hasWarrantyStarted[tokenId] = true; 
 
         warrantyPeriod[tokenId].startTime = block.timestamp;
         emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
@@ -114,7 +138,8 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
      * @dev The following function runs before the transfer of the warranty card. 
             - We don't allow the owner of the token to transfer their warranty card.
-            - We only allow the tranfer of Warranty card when either we are minting the warranty card or burining it.
+            - We only allow the tranfer of Warranty card when either we are minting the warranty card or burining it or
+              when the warranty card is being transferred to a market.
        @param from The previous owner of the Warranty Card. 
        @param to address of account the Warranty Card is to be transferred to. 
        @param tokenId The tokenId of the warranty card to be transferred.
@@ -125,7 +150,9 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         address to,
         uint256 tokenId
     ) internal override virtual {
-        require(from == address(0) || to == address(0), "Cannot transfer this token.");
+        require(from == address(0) || from == approvedMarketAddress 
+            || to == address(0) || to == approvedMarketAddress, 
+            "Cannot transfer this token.");
     }
 
     ///---------------------------------------------------------------------------------------------------------------------
@@ -149,6 +176,8 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
            emit Attest(to, tokenId); 
         }else if(to == address(0)){
             emit Revoke(to, tokenId);
+        }else if(to == approvedMarketAddress){
+            emit MarketTranfer(to, tokenId);
         }
     }
 
@@ -162,7 +191,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     */ 
 
-    function checkIfWarrantyIsOver(uint256 tokenId) public view returns(uint){
+    function checkIfWarrantyIsOver(uint256 tokenId) external view returns(uint){
         require(hasWarrantyStarted[tokenId] == true, "Warranty has not started");
         require(warrantyPeriod[tokenId].startTime != 0, "Warranty has not started");
         require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
@@ -187,7 +216,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
        @param tokenId The tokenId of the warranty card whose warranty period is to be returned.
     */ 
 
-    function getWarrantyPeriod(uint256 tokenId) public view returns (uint) {
+    function getWarrantyPeriod(uint256 tokenId) external view returns (uint) {
         return warrantyPeriod[tokenId].length;
     }
 
@@ -203,6 +232,32 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory){
         return super.tokenURI(tokenId);
+    }
+
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev The following function returns the total number of tokens
+
+    */ 
+
+    function totalTokens() external view returns (uint) {
+        return _tokenIdCounter.current();
+    }
+
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev The following function returns the contract owner
+
+    */
+
+    function getContractOwner() external view returns (address) {
+        return contractOwner;
     }
 
 }
