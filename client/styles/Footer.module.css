@@ -1,0 +1,13 @@
+.foot {
+  margin-top: 3rem;
+  height: 12vh;
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: transparent;
+}
+
+.foot h4 {
+  font-weight: 400;
+  text-align: center;
+}
