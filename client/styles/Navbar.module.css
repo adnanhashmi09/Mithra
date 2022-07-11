@@ -221,4 +221,18 @@
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
   }
+
+  #hamboorger.isactive .line:nth-child(1) {
+    -webkit-transform: translateY(11px) rotate(45deg);
+    -ms-transform: translateY(11px) rotate(45deg);
+    -o-transform: translateY(11px) rotate(45deg);
+    transform: translateY(11px) rotate(45deg);
+  }
+
+  #hamboorger.isactive .line:nth-child(3) {
+    -webkit-transform: translateY(-11px) rotate(-45deg);
+    -ms-transform: translateY(-11px) rotate(-45deg);
+    -o-transform: translateY(-11px) rotate(-45deg);
+    transform: translateY(-11px) rotate(-45deg);
+  }
 }
