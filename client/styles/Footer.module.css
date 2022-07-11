@@ -1,13 +1,30 @@
 .foot {
-  margin-top: 3rem;
-  height: 12vh;
-  width: 100%;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  position: absolute;
   background-color: transparent;
+  bottom: 0;
+  width: 60vw;
+  left: 43vw;
 }
 
 .foot h4 {
   font-weight: 400;
-  text-align: center;
+  bottom: 0;
+}
+
+@media only screen and (max-width: 927px) {
+  .foot {
+    left: 0;
+    margin-top: 3rem;
+    height: 12vh;
+    position: relative;
+    width: 100vw;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: transparent;
+  }
+
+  .foot h4 {
+    font-weight: 400;
+    text-align: center;
+  }
 }
