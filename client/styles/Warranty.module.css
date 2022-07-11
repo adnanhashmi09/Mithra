@@ -36,7 +36,7 @@
 .left p {
   color: rgba(255, 255, 255, 0.7);
   max-width: 500px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .left p span {
@@ -91,7 +91,7 @@
   color: rgba(255, 255, 255, 0.831);
 
   font-size: 1rem;
-  font-family: "Titillium Web";
+  font-family: 'Titillium Web';
 }
 .gradient {
   background-image: linear-gradient(to right, #9718f8, #a3c9e2 100%);
@@ -157,7 +157,7 @@
 
   /*border: 2px solid white; */
   border: solid 2px transparent;
-  font-family: "Titillium Web";
+  font-family: 'Titillium Web';
   background-image: linear-gradient(
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0)
@@ -216,6 +216,14 @@
     min-width: 100%;
 
     text-align: center;
+  }
+
+  .left .my_warranty {
+    justify-content: center;
+  }
+
+  .left .my_warranty p {
+    min-width: unset;
   }
   .purple_box {
     top: 6rem;

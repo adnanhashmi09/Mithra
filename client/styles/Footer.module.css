@@ -2,24 +2,24 @@
   position: absolute;
   background-color: transparent;
   bottom: 0;
-  width: 60vw;
-  left: 43vw;
+  width: 100vw;
+  left: 0vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .foot h4 {
   font-weight: 400;
-  bottom: 0;
 }
 
 @media only screen and (max-width: 927px) {
   .foot {
     left: 0;
-    margin-top: 3rem;
-    height: 12vh;
+    margin-top: 5rem;
+    height: 10vh;
     position: relative;
     width: 100vw;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
     background-color: transparent;
   }
 
