@@ -1,10 +1,10 @@
-import Head from "next/head";
-import styles from "../styles/Warranty.module.css";
-import Link from "next/link";
-import Navbar from "../components/Navbar";
-import Image from "next/image";
-import Arrow from "../assets/Arrow 2.png";
-import Footer from "../components/Footer";
+import Head from 'next/head';
+import styles from '../styles/Warranty.module.css';
+import Link from 'next/link';
+import Navbar from '../components/Navbar';
+import Image from 'next/image';
+import Arrow from '../assets/Arrow 2.png';
+import Footer from '../components/Footer';
 
 function warranty() {
   return (
@@ -25,11 +25,21 @@ function warranty() {
             </p>
             <div className={styles.my_warranty}>
               <div className={styles.ellipse}>
-                <Image src="/Ellipse 2.png" height={35} width={35}></Image>
+                <Image
+                  src="/Ellipse 2.png"
+                  height={35}
+                  width={35}
+                  alt="Circle"
+                />
               </div>
               <p>My Warranties</p>
               <div className={styles.arrow}>
-                <Image src="/Arrow 2.png" height="10px" width="60px"></Image>
+                <Image
+                  src="/Arrow 2.png"
+                  height="10px"
+                  width="60px"
+                  alt="Arrow"
+                />
               </div>
             </div>
           </div>
