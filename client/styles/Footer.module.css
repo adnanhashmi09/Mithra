@@ -1,0 +1,30 @@
+.foot {
+  position: absolute;
+  background-color: transparent;
+  bottom: 0;
+  width: 100vw;
+  left: 0vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.foot h4 {
+  font-weight: 400;
+}
+
+@media only screen and (max-width: 927px) {
+  .foot {
+    left: 0;
+    margin-top: 5rem;
+    height: 10vh;
+    position: relative;
+    width: 100vw;
+    background-color: transparent;
+  }
+
+  .foot h4 {
+    font-weight: 400;
+    text-align: center;
+  }
+}
