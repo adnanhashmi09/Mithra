@@ -1,0 +1,173 @@
+.container {
+  padding: 0 2rem;
+  margin: auto;
+
+  max-width: 1200px;
+}
+
+.main_div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 5rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+.image_left {
+  margin-bottom: 0;
+  /* background-color: #1c0a41; */
+  border-radius: 0 0 20px 20px;
+}
+.image_left_1 {
+  border-radius: 20px 20px 0 0;
+  margin-bottom: 0;
+}
+
+.below_image {
+  position: relative;
+  border-radius: 0 0 20px 20px;
+  transform: translateY(-5px);
+  background-color: #1c0a41;
+
+  height: 2.9rem;
+  display: flex;
+  flex-direction: row;
+}
+.below_image h4 {
+  position: absolute;
+  font-weight: 100;
+  font-size: 10px;
+  font-family: "Poppins";
+  right: 33px;
+  bottom: 0px;
+}
+
+.time {
+  position: absolute;
+  right: 17px;
+  bottom: 10px;
+}
+.content {
+}
+
+.content h1 {
+  font-size: 2.7rem;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.minter {
+  margin-top: 0;
+}
+.minter h5 {
+  font-weight: 300;
+  font-size: 1.1rem;
+  color: #aba9a9;
+  margin: 0;
+}
+
+.owner h5 {
+  font-weight: 300;
+  margin: 0;
+
+  font-size: 1.1rem;
+  color: #aba9a9;
+}
+.price h5 {
+  font-weight: 300;
+  margin: 0;
+
+  font-size: 1.1rem;
+  color: #aba9a9;
+}
+.desc h5 {
+  font-weight: 300;
+  margin: 0;
+
+  font-size: 1.1rem;
+  color: #aba9a9;
+}
+
+.minter p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+
+.owner p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+.price p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+.desc p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+
+.desc {
+  max-width: 30vw;
+}
+.lesgo {
+  display: flex;
+  flex-direction: row;
+}
+
+.submit button {
+  margin-right: 2rem;
+  padding: 1rem;
+  margin-top: 2.5rem;
+  border-radius: 30rem;
+  color: white;
+  padding: 0.7rem 2.5rem;
+  background-color: #0a0623;
+
+  /*border: 2px solid white; */
+  border: solid 2px transparent;
+  font-family: "Titillium Web";
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(101deg, #78e4ff, #ff48fa);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #0a0623 inset;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: 200ms ease-in all;
+}
+.submit button:hover {
+  box-shadow: none;
+  color: white;
+}
+
+@media only screen and (max-width: 1280px) {
+  .lesgo {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 980px) {
+  .main_div {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .image_left {
+    margin-bottom: 2rem;
+  }
+  .desc {
+    max-width: unset;
+  }
+}
