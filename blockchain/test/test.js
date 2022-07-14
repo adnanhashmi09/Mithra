@@ -2,15 +2,21 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
 describe('Warranty NFT Test', function () {
-  let NFTdeployer, addr1, addr2, warranty, marketPlace, tokenName, tokenSymbol;
+  let NFTdeployer,
+    addr1,
+    marketPlaceDeployer,
+    warranty,
+    marketPlace,
+    tokenName,
+    tokenSymbol;
 
   beforeEach(async function () {
-    [NFTdeployer, addr1, addr2] = await ethers.getSigners();
+    [NFTdeployer, addr1, marketPlaceDeployer] = await ethers.getSigners();
     tokenName = 'Nike NFT';
     tokenSymbol = 'NKT';
 
     const MarketPlace = await ethers.getContractFactory('WarrantyMarket');
-    marketPlace = await MarketPlace.deploy();
+    marketPlace = await MarketPlace.connect(marketPlaceDeployer).deploy();
     await marketPlace.deployed();
 
     const Warranty = await ethers.getContractFactory('Warranty');
@@ -20,6 +26,9 @@ describe('Warranty NFT Test', function () {
       marketPlace.address
     );
     await warranty.deployed();
+
+    // console.table(['NFT', warranty.address]);
+    // console.table(['Market', marketPlace.address]);
   });
 
   describe('Deployment', function () {
@@ -93,7 +102,25 @@ describe('Warranty NFT Test', function () {
   });
 
   describe('List warranty', function () {
-    it('  ', async function () {});
-    it('', async function () {});
+    it('Warranty card is listed and owner is said to the marketplace contract', async function () {
+      await warranty.safeMint(
+        NFTdeployer.address,
+        'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
+        'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
+        10
+      );
+
+      await warranty
+        .connect(NFTdeployer)
+        .setApprovalForAll(marketPlace.address, true);
+
+      await expect(
+        marketPlace.connect(NFTdeployer).listWarrantyCard(warranty.address, 0)
+      )
+        .to.emit(marketPlace, 'ListedInMarket')
+        .withArgs(0, 0, marketPlace.address, NFTdeployer.address);
+
+      expect(await warranty.ownerOf(0)).to.equal(marketPlace.address);
+    });
   });
 });

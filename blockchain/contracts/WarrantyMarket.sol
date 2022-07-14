@@ -51,12 +51,15 @@ contract WarrantyMarket is ReentrancyGuard, Ownable{
     */ 
 
     function listWarrantyCard(InterfaceWarranty _nft, uint256 tokenId) external nonReentrant {
-        require(_nft.getContractOwner() == msg.sender, "Not the owner of the NFT d.");
+        require(_nft.getContractOwner() == msg.sender, "Not the owner of the NFT.");
         require(_nft.totalTokens() > tokenId, "Token doesn't exist.");
 
         uint256 newItemId = _itemCount.current();
-        items[newItemId] = Item(newItemId, _nft, tokenId, _nft.ownerOf(tokenId), _nft.ownerOf(tokenId));
-        // _nft.transferFrom(msg.sender, address(this), tokenId);
+        address _createdBy = _nft.ownerOf(tokenId);
+
+        _nft.transferFrom(msg.sender, address(this), tokenId);
+        
+        items[newItemId] = Item(newItemId, _nft, tokenId, _nft.ownerOf(tokenId), _createdBy);
 
         emit ListedInMarket(newItemId, tokenId, address(this), items[newItemId].createdBy);
     }
