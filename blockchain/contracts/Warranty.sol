@@ -20,7 +20,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     address approvedMarketAddress;
     address private contractOwner;
     mapping(string => uint256) public warrantyCount; // to track only one warranty card per ipfs hash
-    mapping(uint256 => bool) private hasWarrantyStarted;
+    mapping(uint256 => bool) private _hasWarrantyStarted;
 
     struct WarrantyPeriod {
         uint256 startTime;
@@ -85,7 +85,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        hasWarrantyStarted[tokenId] = false;
+        _hasWarrantyStarted[tokenId] = false;
 
         uint256 length = warrantyLengthInDays * 1 days;
         warrantyPeriod[tokenId] = WarrantyPeriod(0, length);
@@ -106,11 +106,11 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     function startWarrantyPeriod(uint256 tokenId, address originSender) external {
         require(originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
-        require(hasWarrantyStarted[tokenId] == false, "Warranty has already started");
+        require(_hasWarrantyStarted[tokenId] == false, "Warranty has already started");
         require(warrantyPeriod[tokenId].startTime == 0, "Warranty has already started");
         require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
         
-        hasWarrantyStarted[tokenId] = true; 
+        _hasWarrantyStarted[tokenId] = true; 
 
         warrantyPeriod[tokenId].startTime = block.timestamp;
         emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
@@ -192,7 +192,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     */ 
 
     function checkIfWarrantyIsOver(uint256 tokenId) external view returns(uint){
-        require(hasWarrantyStarted[tokenId] == true, "Warranty has not started");
+        require(_hasWarrantyStarted[tokenId] == true, "Warranty has not started");
         require(warrantyPeriod[tokenId].startTime != 0, "Warranty has not started");
         require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
 
@@ -209,6 +209,21 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev The following function returns the warranty status associated with a warranty card.
+       @param tokenId The tokenId of the warranty card whose warranty status is to be returned.
+    */ 
+
+    function hasWarrantyStarted(uint256 tokenId) external view returns (bool) {
+        return _hasWarrantyStarted[tokenId];
+    }
+
+
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
 
     /** 
 
