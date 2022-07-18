@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "./openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "./openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "./openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "./openzeppelin/contracts/access/Ownable.sol";
+import "./openzeppelin/contracts/utils/Counters.sol";
 
 
 /// @title A contract for Warranty Card with Decay functionality
@@ -105,7 +105,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     */ 
 
     function startWarrantyPeriod(uint256 tokenId, address originSender) external {
-        require(originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
+        require(originSender == approvedMarketAddress || originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
         require(_hasWarrantyStarted[tokenId] == false, "Warranty has already started");
         require(warrantyPeriod[tokenId].startTime == 0, "Warranty has already started");
         require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");

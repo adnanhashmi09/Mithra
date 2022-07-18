@@ -4,6 +4,7 @@ const { ethers } = require('hardhat');
 describe('Warranty NFT Test', function () {
   let NFTdeployer,
     addr1,
+    addr2,
     marketPlaceDeployer,
     warranty,
     marketPlace,
@@ -11,7 +12,8 @@ describe('Warranty NFT Test', function () {
     tokenSymbol;
 
   beforeEach(async function () {
-    [NFTdeployer, addr1, marketPlaceDeployer] = await ethers.getSigners();
+    [NFTdeployer, addr1, marketPlaceDeployer, addr2] =
+      await ethers.getSigners();
     tokenName = 'Nike NFT';
     tokenSymbol = 'NKT';
 
@@ -120,7 +122,11 @@ describe('Warranty NFT Test', function () {
         .to.emit(marketPlace, 'ListedInMarket')
         .withArgs(0, 0, marketPlace.address, NFTdeployer.address);
 
-      expect(await warranty.ownerOf(0)).to.equal(marketPlace.address);
+      await expect(
+        marketPlace
+          .connect(marketPlaceDeployer)
+          .transferWarrantyCard(addr2.address, 0)
+      ).to.emit(marketPlace, 'WarrantyCardTransferredToBuyer');
     });
   });
 });
