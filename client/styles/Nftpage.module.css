@@ -171,3 +171,35 @@
     max-width: unset;
   }
 }
+
+.main_table {
+  width: 100%;
+  margin-top: 2rem;
+  border: 0px solid #eeeeee;
+}
+
+.table_header {
+  display: flex;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.295);
+  padding: 18px 0;
+}
+
+.table_row {
+  display: flex;
+  width: 100%;
+  padding: 18px 0;
+}
+.table_row:nth-of-type(odd) {
+  background: #eeeeee09;
+}
+
+.table_data,
+.header__item {
+  flex: 1 1 20%;
+  text-align: center;
+}
+
+.header__item {
+  text-transform: uppercase;
+}

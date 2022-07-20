@@ -69,12 +69,46 @@ const Slug = () => {
                 mankind
               </p>
             </div>
-            <div className={styles.lesgo}>
+            {/* <div className={styles.lesgo}>
               <div className={styles.submit}>
                 <button>Claim Warranty</button>
               </div>
               <div className={styles.submit}>
                 <button>Transaction History</button>
+              </div>
+            </div> */}
+          </div>
+        </div>
+        <div className={styles.main_table}>
+          <div className={styles.table}>
+            <div className={styles.table_header}>
+              <div className={styles.header__item}>Name</div>
+              <div className={styles.header__item}>Wins</div>
+              <div className={styles.header__item}>Draws</div>
+              <div className={styles.header__item}>Losses</div>
+              <div className={styles.header__item}>Total</div>
+            </div>
+            <div className={styles.table_content}>
+              <div className={styles.table_row}>
+                <div className={styles.table_data}>Tom</div>
+                <div className={styles.table_data}>2</div>
+                <div className={styles.table_data}>0</div>
+                <div className={styles.table_data}>1</div>
+                <div className={styles.table_data}>5</div>
+              </div>
+              <div className={styles.table_row}>
+                <div className={styles.table_data}>Dick</div>
+                <div className={styles.table_data}>1</div>
+                <div className={styles.table_data}>1</div>
+                <div className={styles.table_data}>2</div>
+                <div className={styles.table_data}>3</div>
+              </div>
+              <div className={styles.table_row}>
+                <div className={styles.table_data}>Harry</div>
+                <div className={styles.table_data}>0</div>
+                <div className={styles.table_data}>2</div>
+                <div className={styles.table_data}>2</div>
+                <div className={styles.table_data}>2</div>
               </div>
             </div>
           </div>
