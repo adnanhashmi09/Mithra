@@ -76,7 +76,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
        @param warrantyLengthInDays The length of the warranty period in days.
     */ 
 
-    function safeMint(address to, string memory ipfsHash, string memory uri, uint256 warrantyLengthInDays) public onlyOwner returns(uint) {
+    function safeMint(address to, string memory ipfsHash, string memory uri, uint256 warrantyLengthInDays) public returns(uint) {
         require(warrantyCount[ipfsHash] != 1, "Warranty: already minted");
         warrantyCount[ipfsHash] = 1;
         uint256 tokenId = _tokenIdCounter.current();
@@ -85,12 +85,15 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        _hasWarrantyStarted[tokenId] = false;
-
         uint256 length = warrantyLengthInDays * 1 days;
         warrantyPeriod[tokenId] = WarrantyPeriod(0, length);
 
+        _hasWarrantyStarted[tokenId] = true; 
+
+        warrantyPeriod[tokenId].startTime = block.timestamp;
+
         emit WarrantyCardMinted(to, tokenId, uri, warrantyLengthInDays);
+        emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
         return tokenId;
     }
 
@@ -104,17 +107,17 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     */ 
 
-    function startWarrantyPeriod(uint256 tokenId, address originSender) external {
-        require(originSender == approvedMarketAddress || originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
-        require(_hasWarrantyStarted[tokenId] == false, "Warranty has already started");
-        require(warrantyPeriod[tokenId].startTime == 0, "Warranty has already started");
-        require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
+    // function startWarrantyPeriod(uint256 tokenId, address originSender) external {
+    //     require(originSender == approvedMarketAddress || originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
+    //     require(_hasWarrantyStarted[tokenId] == false, "Warranty has already started");
+    //     require(warrantyPeriod[tokenId].startTime == 0, "Warranty has already started");
+    //     require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
         
-        _hasWarrantyStarted[tokenId] = true; 
+    //     _hasWarrantyStarted[tokenId] = true; 
 
-        warrantyPeriod[tokenId].startTime = block.timestamp;
-        emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
-    }
+    //     warrantyPeriod[tokenId].startTime = block.timestamp;
+    //     emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
+    // }
 
 
     ///---------------------------------------------------------------------------------------------------------------------
