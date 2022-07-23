@@ -9,7 +9,7 @@ import "./InterfaceWarranty.sol";
 
 /// @title A contract which manages and keeps track of all the different warranty cards.
 /// @author Adnan Hashmi
-/// @notice For now this contract does nothing
+/// @notice For now this contract does nothing`
 
 contract WarrantyMarket is ReentrancyGuard, Ownable{
 
@@ -77,8 +77,28 @@ contract WarrantyMarket is ReentrancyGuard, Ownable{
         require(itemId < _itemCount.current(), "Item doesn't exist.");
         items[itemId].nft.transferFrom(address(this), recipient, items[itemId].tokenId);
         items[itemId].nft.startWarrantyPeriod(items[itemId].tokenId, address(this));
+        items[itemId].currentOwner = recipient;
          
         emit WarrantyCardTransferredToBuyer(itemId, recipient, items[itemId].createdBy);
     }
 
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev This function handles the resale of the token (basically transferring the token to the new owner)
+    */ 
+
+    function Resale(address recipient, uint256 itemId) public nonReentrant{
+        require(itemId < _itemCount.current(), "Item doesn't exist.");
+        require(recipient!=address(this), "You can't transfer to yourself.");
+        require(recipient!=address(0), "You can't transfer to the null address.");
+
+        items[itemId].nft.transferFrom(items[itemId].currentOwner, recipient, items[itemId].tokenId);
+        items[itemId].currentOwner = recipient;
+         
+        emit WarrantyCardTransferredToBuyer(itemId, recipient, items[itemId].createdBy);
+    }
+    
 }   

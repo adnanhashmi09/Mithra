@@ -103,7 +103,7 @@ describe('Warranty NFT Test', function () {
     });
   });
 
-  describe('List warranty', function () {
+  describe('List warranty And Transfer to new owner', function () {
     it('Warranty card is listed and owner is said to the marketplace contract', async function () {
       await warranty.safeMint(
         NFTdeployer.address,
@@ -127,6 +127,37 @@ describe('Warranty NFT Test', function () {
           .connect(marketPlaceDeployer)
           .transferWarrantyCard(addr2.address, 0)
       ).to.emit(marketPlace, 'WarrantyCardTransferredToBuyer');
+
+      expect(await warranty.ownerOf(0)).to.equal(addr2.address);
+    });
+  });
+
+  describe('Resale warranty after user buys product', function () {
+    it('Set the new owner correctly after resale', async function () {
+      // Mint
+      await warranty.safeMint(
+        NFTdeployer.address,
+        'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
+        'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
+        10
+      );
+
+      // List
+      await warranty
+        .connect(NFTdeployer)
+        .setApprovalForAll(marketPlace.address, true);
+
+      await marketPlace
+        .connect(NFTdeployer)
+        .listWarrantyCard(warranty.address, 0);
+
+      // Buy
+      await marketPlace
+        .connect(marketPlaceDeployer)
+        .transferWarrantyCard(addr2.address, 0);
+
+      // Resale
+      await marketPlace.connect(addr2).Resale(addr1.address, 1);
     });
   });
 });
