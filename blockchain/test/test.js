@@ -70,94 +70,35 @@ describe('Warranty NFT Test', function () {
 
     it('Warranty status is set to false when first minted', async function () {
       await warranty.safeMint(
-        NFTdeployer.address,
+        addr1.address,
         'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
         'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
         10
       );
 
-      expect(await warranty.hasWarrantyStarted(0)).to.equal(false);
-    });
-
-    it('Warranty period started correctly', async function () {
-      await warranty.safeMint(
-        NFTdeployer.address,
-        'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
-        'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
-        10
-      );
-
-      await expect(
-        warranty.startWarrantyPeriod(0, addr1.address)
-      ).to.be.revertedWith(
-        'Warranty: only contract owner can start the warranty period'
-      );
-
-      await expect(
-        warranty.startWarrantyPeriod(0, NFTdeployer.address)
-      ).to.emit(warranty, 'WarrantyPeriodStarted');
-
-      await expect(
-        warranty.startWarrantyPeriod(0, NFTdeployer.address)
-      ).to.be.revertedWith('Warranty has already started');
+      expect(await warranty.hasWarrantyStarted(0)).to.equal(true);
     });
   });
 
   describe('List warranty And Transfer to new owner', function () {
-    it('Warranty card is listed and owner is said to the marketplace contract', async function () {
+    it('Warranty card is listed', async function () {
       await warranty.safeMint(
-        NFTdeployer.address,
+        addr1.address,
         'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
         'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
         10
       );
 
-      await warranty
-        .connect(NFTdeployer)
-        .setApprovalForAll(marketPlace.address, true);
+      await expect(warranty.connect(addr1).listForSale(0))
+        .to.emit(warranty, 'ProductListedForSale')
+        .withArgs(0, addr1.address);
 
-      await expect(
-        marketPlace.connect(NFTdeployer).listWarrantyCard(warranty.address, 0)
-      )
-        .to.emit(marketPlace, 'ListedInMarket')
-        .withArgs(0, 0, marketPlace.address, NFTdeployer.address);
-
-      await expect(
-        marketPlace
-          .connect(marketPlaceDeployer)
-          .transferWarrantyCard(addr2.address, 0)
-      ).to.emit(marketPlace, 'WarrantyCardTransferredToBuyer');
+      await expect(warranty.connect(addr2).transferWarranty(0)).to.emit(
+        warranty,
+        'WarrantyCardTransferredToBuyer'
+      );
 
       expect(await warranty.ownerOf(0)).to.equal(addr2.address);
-    });
-  });
-
-  describe('Resale warranty after user buys product', function () {
-    it('Set the new owner correctly after resale', async function () {
-      // Mint
-      await warranty.safeMint(
-        NFTdeployer.address,
-        'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
-        'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
-        10
-      );
-
-      // List
-      await warranty
-        .connect(NFTdeployer)
-        .setApprovalForAll(marketPlace.address, true);
-
-      await marketPlace
-        .connect(NFTdeployer)
-        .listWarrantyCard(warranty.address, 0);
-
-      // Buy
-      await marketPlace
-        .connect(marketPlaceDeployer)
-        .transferWarrantyCard(addr2.address, 0);
-
-      // Resale
-      await marketPlace.connect(addr2).Resale(addr1.address, 1);
     });
   });
 });

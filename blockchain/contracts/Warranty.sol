@@ -21,6 +21,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     address private contractOwner;
     mapping(string => uint256) public warrantyCount; // to track only one warranty card per ipfs hash
     mapping(uint256 => bool) private _hasWarrantyStarted;
+    mapping(uint256 => bool) private _outForSale;
 
     struct WarrantyPeriod {
         uint256 startTime;
@@ -46,6 +47,9 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     event Attest(address indexed to, uint256 tokenId);
     event Revoke(address indexed to, uint256 tokenId);
     event MarketTranfer(address indexed to, uint256 tokenId);
+    event WarrantyCardTransferredToBuyer(uint256 tokenId, address indexed buyer, address indexed seller); 
+    event ProductListedForSale(uint256 tokenId, address indexed seller);
+
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
@@ -84,6 +88,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        _outForSale[tokenId] = false;
 
         uint256 length = warrantyLengthInDays * 1 days;
         warrantyPeriod[tokenId] = WarrantyPeriod(0, length);
@@ -95,6 +100,46 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         emit WarrantyCardMinted(to, tokenId, uri, warrantyLengthInDays);
         emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
         return tokenId;
+    }
+
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev This function transfers NFT to the given address.
+       @param tokenId The token Id which is being transferred. 
+       
+    */ 
+
+    function transferWarranty(uint256 tokenId) public {
+        require(_tokenIdCounter.current() > tokenId, "Warranty: tokenId is invalid");
+        require(_outForSale[tokenId] == true, "Warranty: token is not out for sale");
+
+        _transfer(ownerOf(tokenId), msg.sender, tokenId);
+
+        emit WarrantyCardTransferredToBuyer(tokenId, msg.sender, ownerOf(tokenId));
+    }
+
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev This function transfers NFT to the given address.
+       @param tokenId The token Id which is being transferred. 
+       
+    */ 
+
+    function listForSale(uint256 tokenId) public {
+        require(_tokenIdCounter.current() > tokenId, "Warranty: tokenId is invalid");
+        require(ownerOf(tokenId) == msg.sender, "Warranty: caller is not the owner");
+        require(_outForSale[tokenId] == false, "Warranty: token is already out for sale");
+
+        _outForSale[tokenId] = true;
+
+        emit ProductListedForSale(tokenId, ownerOf(tokenId));
+
     }
 
     ///---------------------------------------------------------------------------------------------------------------------
@@ -148,15 +193,15 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
        @param tokenId The tokenId of the warranty card to be transferred.
     */ 
     
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal override virtual {
-        require(from == address(0) || from == approvedMarketAddress 
-            || to == address(0) || to == approvedMarketAddress, 
-            "Cannot transfer this token.");
-    }
+    // function _beforeTokenTransfer(
+    //     address from,
+    //     address to,
+    //     uint256 tokenId
+    // ) internal override virtual {
+    //     require(from == address(0) || from == approvedMarketAddress 
+    //         || to == address(0) || to == approvedMarketAddress, 
+    //         "Cannot transfer this token.");
+    // }
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
@@ -179,8 +224,6 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
            emit Attest(to, tokenId); 
         }else if(to == address(0)){
             emit Revoke(to, tokenId);
-        }else if(to == approvedMarketAddress){
-            emit MarketTranfer(to, tokenId);
         }
     }
 
