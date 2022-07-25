@@ -45,6 +45,7 @@ function Navbar(props) {
                     ) : (
                       ""
                     )}
+                    // hello
                   </li>
                 </Link>
                 <Link href="/brand">
