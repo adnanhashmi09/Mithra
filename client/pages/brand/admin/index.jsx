@@ -4,7 +4,7 @@ import styles from "../../../styles/BrandLogin.module.css";
 import Image from "next/image";
 import Footer from "../../../components/Footer";
 import Link from "next/link";
-function admin() {
+function Admin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -67,4 +67,4 @@ function admin() {
   );
 }
 
-export default admin;
+export default Admin;
