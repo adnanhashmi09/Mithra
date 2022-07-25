@@ -7,6 +7,7 @@ import "./openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "./openzeppelin/contracts/access/Ownable.sol";
 import "./openzeppelin/contracts/utils/Counters.sol";
 
+// TODO: the company can only transfer if the resale option is set to true
 
 /// @title A contract for Warranty Card with Decay functionality
 /// @author Adnan Hashmi
@@ -21,6 +22,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     address private contractOwner;
     mapping(string => uint256) public warrantyCount; // to track only one warranty card per ipfs hash
     mapping(uint256 => bool) private _hasWarrantyStarted;
+    mapping(uint256 => bool) private _outForSale;
 
     struct WarrantyPeriod {
         uint256 startTime;
@@ -85,12 +87,17 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        _hasWarrantyStarted[tokenId] = false;
-
         uint256 length = warrantyLengthInDays * 1 days;
         warrantyPeriod[tokenId] = WarrantyPeriod(0, length);
 
+        _hasWarrantyStarted[tokenId] = true; 
+        _outForSale[tokenId] = false;
+
+        warrantyPeriod[tokenId].startTime = block.timestamp;
+        
         emit WarrantyCardMinted(to, tokenId, uri, warrantyLengthInDays);
+        emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
+
         return tokenId;
     }
 
@@ -99,21 +106,31 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     /** 
 
-     * @dev This function starts the warranty period for the given tokenId.
-       @param tokenId The token Id of the Warranty Card.
-
+     * @dev This function lists the warranty card out for sale.
+       @param tokenId The id of the Warranty Card.
     */ 
 
-    function startWarrantyPeriod(uint256 tokenId, address originSender) external {
-        require(originSender == approvedMarketAddress || originSender == contractOwner, "Warranty: only contract owner can start the warranty period");
-        require(_hasWarrantyStarted[tokenId] == false, "Warranty has already started");
-        require(warrantyPeriod[tokenId].startTime == 0, "Warranty has already started");
-        require(warrantyPeriod[tokenId].length != 0, "Warranty period cannot be 0.");
-        
-        _hasWarrantyStarted[tokenId] = true; 
+    function listForSale(uint256 tokenId) public{
+        require(msg.sender == ownerOf(tokenId), "Warranty: caller is not the owner");
+        require(!_outForSale[tokenId], "Warranty: already listed for sale");
+        _outForSale[tokenId] = true;
+    }
 
-        warrantyPeriod[tokenId].startTime = block.timestamp;
-        emit WarrantyPeriodStarted(tokenId, warrantyPeriod[tokenId].startTime, warrantyPeriod[tokenId].length);
+    ///---------------------------------------------------------------------------------------------------------------------
+    ///---------------------------------------------------------------------------------------------------------------------
+
+    /** 
+
+     * @dev This function mints a Soulbound NFT to the given address.
+       @param to The address to which the Warranty Card is to be minted. 
+       @param tokenId The id of the Warranty Card.
+    */ 
+
+    function resale(uint256 tokenId, address to) public onlyOwner{
+        require(tokenId < _tokenIdCounter.current(), "Warranty: token Id is not valid");
+        require(_outForSale[tokenId] == true, "Warranty: token is not out for sale");
+
+        _transfer(ownerOf(tokenId), to, tokenId);
     }
 
 
@@ -150,9 +167,8 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         address to,
         uint256 tokenId
     ) internal override virtual {
-        require(from == address(0) || from == approvedMarketAddress 
-            || to == address(0) || to == approvedMarketAddress, 
-            "Cannot transfer this token.");
+        require(from == address(0) || to == address(0) || msg.sender == contractOwner, 
+                "Warranty: Cannot transfer this token.");
     }
 
     ///---------------------------------------------------------------------------------------------------------------------
