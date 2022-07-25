@@ -130,6 +130,34 @@ describe('Warranty NFT Test', function () {
       ).to.be.revertedWith('Warranty: Cannot transfer this token.');
     });
 
-    it('');
+    it('Warranty card cannot be transferred if the user has not listed it for sale', async function () {
+      await warranty.safeMint(
+        addr1.address,
+        'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
+        'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
+        10
+      );
+
+      await expect(
+        warranty.connect(NFTdeployer).resale(0, addr2.address)
+      ).to.be.revertedWith('Warranty: token is not out for sale');
+    });
+
+    it('Warranty card can be transferred by the NFT deployer if the user has listed it for sale', async function () {
+      await warranty.safeMint(
+        addr1.address,
+        'QmYwAPJzv5CZsnA625sXf2nemtYgPpHdWEz79ojWnPbdG',
+        'ipfs://Qme3QxqsJih5psasse4d2FFLFLwaKx7wHXW3Topk3Q8b14',
+        10
+      );
+
+      await warranty.connect(addr1).listForSale(0);
+
+      await expect(
+        warranty.connect(NFTdeployer).resale(0, addr2.address)
+      ).to.emit(warranty, 'WarrantyCardTransferred');
+
+      expect(await warranty.ownerOf(0)).to.equal(addr2.address);
+    });
   });
 });

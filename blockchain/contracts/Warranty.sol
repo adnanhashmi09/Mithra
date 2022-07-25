@@ -48,6 +48,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     event Attest(address indexed to, uint256 tokenId);
     event Revoke(address indexed to, uint256 tokenId);
     event MarketTranfer(address indexed to, uint256 tokenId);
+    event WarrantyCardTransferred(uint256 tokenId, address indexed to);
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
@@ -131,6 +132,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         require(_outForSale[tokenId] == true, "Warranty: token is not out for sale");
 
         _transfer(ownerOf(tokenId), to, tokenId);
+        emit WarrantyCardTransferred(tokenId, to);
     }
 
 
