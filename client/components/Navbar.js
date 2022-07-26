@@ -47,6 +47,16 @@ function Navbar(props) {
                     )}
                   </li>
                 </Link>
+                <Link href="/shop">
+                  <li>
+                    Shop
+                    {und === "shop" ? (
+                      <div className={styles.underline}></div>
+                    ) : (
+                      ""
+                    )}
+                  </li>
+                </Link>
                 <Link href="/brand">
                   <li>
                     Brand
@@ -88,6 +98,16 @@ function Navbar(props) {
                 <li>
                   Home
                   {und === "home" ? (
+                    <div className={styles.underline}></div>
+                  ) : (
+                    ""
+                  )}
+                </li>
+              </Link>
+              <Link href="/shop">
+                <li>
+                  Shop
+                  {und === "shop" ? (
                     <div className={styles.underline}></div>
                   ) : (
                     ""

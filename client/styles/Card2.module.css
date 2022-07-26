@@ -1,0 +1,328 @@
+.card {
+  width: 300px;
+  height: min-content;
+  padding: 25px;
+  margin: 0 15px;
+  background: rgb(255, 255, 255);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.card .card_img {
+  width: 100%;
+  text-align: center;
+}
+
+.card .card_img img {
+  height: 200px;
+  margin: -150px 0 15px 0;
+  filter: drop-shadow(0 8px 8px #cdd5e2);
+  transition: 0.3s;
+}
+
+.card:hover .card_img img {
+  height: 240px;
+}
+
+.card .card_title h3 {
+  color: #1b2430;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.card .card_title p {
+  color: #b3bac3;
+  font-size: 18px;
+  margin-top: -4px;
+  letter-spacing: -0.5px;
+}
+
+.card .card_details {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.card .card_details span {
+  color: #b3bac3;
+  font-size: 16px;
+}
+
+.card .card_details p {
+  color: #1b2430;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: -2px;
+}
+
+.card button {
+  width: 100%;
+  height: 40px;
+  color: #fff;
+  background: #0a0623;
+  border-radius: 3px;
+  font-size: 18px;
+  border: 0px solid;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 200ms;
+  border-radius: 1000px;
+}
+
+.card button:hover {
+  background: #220046;
+}
+
+/* Hello */
+
+.heading {
+  position: relative;
+  z-index: 10;
+}
+.purple_box {
+  height: 3rem;
+  width: 9.2rem;
+  position: absolute;
+  background-image: linear-gradient(to right, #9718f8, #a3c9e2 180%);
+  top: 20rem;
+  left: 10rem;
+  z-index: -9;
+}
+.left h1 {
+  font-size: 6rem;
+  line-height: 5.5rem;
+  max-width: 500px;
+  letter-spacing: 0.2rem;
+}
+
+.left p {
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 500px;
+  font-size: 1.3rem;
+}
+
+.left p span {
+  color: #ad6ae0;
+}
+.my_warranty {
+  display: flex;
+}
+.arrow {
+  margin: auto 5px;
+  display: block;
+}
+.ellipse {
+  margin: auto 0px;
+  padding-top: 9px;
+  display: block;
+}
+
+.my_warranty p {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.928);
+  transition: 200ms ease-in all;
+  cursor: pointer;
+}
+
+.my_warranty p:hover {
+  color: rgba(255, 255, 255, 0.601);
+}
+
+.right {
+  width: 40vw;
+  margin-top: 3rem;
+  margin-left: 1rem;
+}
+
+.hashtag {
+  position: absolute;
+  top: 37px;
+  opacity: 0.8;
+}
+.checkout_right form h3 {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.819);
+  margin-bottom: 0px;
+}
+
+.right input {
+  width: 100%;
+  padding: 0.5rem 0.8rem 0.8rem 1.8rem;
+  background-color: #0a0623;
+  border: 0px solid;
+  color: rgba(255, 255, 255, 0.831);
+
+  font-size: 1rem;
+  font-family: "Titillium Web";
+}
+.gradient {
+  background-image: linear-gradient(to right, #9718f8, #a3c9e2 100%);
+  padding: 0 0 0.1rem 0;
+}
+.right input:focus {
+  outline: none;
+}
+.transaction_id {
+  position: relative;
+
+  margin-bottom: 1.5rem;
+}
+.product_name {
+  position: relative;
+}
+
+.your_name {
+  position: relative;
+}
+
+.product_date {
+  position: relative;
+}
+.or {
+  font-size: 1.2rem;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0px;
+  color: rgba(255, 255, 255, 0.272);
+  margin: auto;
+}
+.orr {
+  font-weight: 900;
+  font-size: 2rem;
+  color: white;
+}
+
+.or_div {
+  display: flex;
+}
+
+.your_name {
+  margin-top: 3rem;
+}
+/* .submit {
+  background-image: linear-gradient(to right, #9718f8, #a3c9e2 100%);
+  padding: 0 0 0.1rem 0;
+} */
+
+.submit {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+.checkout_right form button {
+  padding: 1rem;
+  margin-top: 2.5rem;
+  border-radius: 30rem;
+  color: white;
+  padding: 0.7rem 2.5rem;
+  background-color: #0a0623;
+
+  /*border: 2px solid white; */
+  border: solid 2px transparent;
+  font-family: "Titillium Web";
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(101deg, #78e4ff, #ff48fa);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #0a0623 inset;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: 200ms ease-in all;
+}
+
+.checkout_right form button:hover {
+  box-shadow: none;
+  color: white;
+}
+
+@media only screen and (max-width: 1003px) {
+  .purple_box {
+    height: 3rem;
+    width: 9.2rem;
+    position: absolute;
+    background-image: linear-gradient(to right, #9718f8, #a3c9e2 180%);
+    top: 25rem;
+    left: 10rem;
+    z-index: -9;
+  }
+}
+
+@media only screen and (max-width: 927px) {
+  .container {
+    padding: 0 1rem;
+    margin: auto;
+
+    max-width: 1200px;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .left {
+    width: 100%;
+  }
+
+  .left h1 {
+    font-size: 4.2rem;
+    line-height: 4rem;
+    letter-spacing: 0.2rem;
+    min-width: 100%;
+    text-align: center;
+  }
+  .left p {
+    min-width: 100%;
+
+    text-align: center;
+  }
+
+  .left .my_warranty {
+    justify-content: center;
+  }
+
+  .left .my_warranty p {
+    min-width: unset;
+  }
+  .purple_box {
+    top: 6rem;
+    left: 60vw;
+  }
+  .right {
+    min-width: 90%;
+  }
+  .checkout_right form {
+    min-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 705px) {
+  .purple_box {
+    top: 10rem;
+    left: 40vw;
+  }
+}
+
+@media only screen and (max-width: 656px) {
+  .purple_box {
+    top: 10rem;
+    left: 63vw;
+  }
+}
+
+@media only screen and (max-width: 558px) {
+  .purple_box {
+    top: 14rem;
+    left: 35vw;
+  }
+}
+
+@media only screen and (max-width: 381px) {
+  .purple_box {
+    top: 18rem;
+    left: 32vw;
+  }
+}
