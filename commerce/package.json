@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "commerce",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,16 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/material": "^5.9.2",
-    "next": "12.2.1",
+    "font-awesome": "^4.7.0",
+    "next": "12.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.7",
-    "eslint": "8.19.0",
-    "eslint-config-next": "12.2.1"
+    "eslint": "8.20.0",
+    "eslint-config-next": "12.2.3"
   }
 }

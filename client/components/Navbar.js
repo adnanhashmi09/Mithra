@@ -47,10 +47,20 @@ function Navbar(props) {
                     )}
                   </li>
                 </Link>
-                <Link href="/marketplace">
+                {/* <Link href="/shop">
                   <li>
-                    MarketPlace{" "}
-                    {und === "marketplace" ? (
+                    Shop
+                    {und === "shop" ? (
+                      <div className={styles.underline}></div>
+                    ) : (
+                      ""
+                    )}
+                  </li>
+                </Link> */}
+                <Link href="/brand">
+                  <li>
+                    Brand
+                    {und === "brand" ? (
                       <div className={styles.underline}></div>
                     ) : (
                       ""
@@ -94,10 +104,20 @@ function Navbar(props) {
                   )}
                 </li>
               </Link>
-              <Link href="/marketplace">
+              {/* <Link href="/shop">
                 <li>
-                  MarketPlace{" "}
-                  {und === "marketplace" ? (
+                  Shop
+                  {und === "shop" ? (
+                    <div className={styles.underline}></div>
+                  ) : (
+                    ""
+                  )}
+                </li>
+              </Link> */}
+              <Link href="/brand">
+                <li>
+                  Brand{" "}
+                  {und === "brand" ? (
                     <div className={styles.underline}></div>
                   ) : (
                     ""

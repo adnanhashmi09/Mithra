@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+.main h1 {
+  text-align: center;
+  font-size: 3rem;
+}
+.main h4 {
+  font-weight: 200;
+  font-size: large;
+  margin: 0;
+}
+.container {
+  padding: 0 2rem;
+  margin: auto;
+
+  max-width: 1200px;
+}
