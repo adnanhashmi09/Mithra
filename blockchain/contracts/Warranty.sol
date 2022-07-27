@@ -130,6 +130,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     function resale(uint256 tokenId, address to) public onlyOwner{
         require(tokenId < _tokenIdCounter.current(), "Warranty: token Id is not valid");
         require(_outForSale[tokenId] == true, "Warranty: token is not out for sale");
+        _outForSale[tokenId] = false;
 
         _transfer(ownerOf(tokenId), to, tokenId);
         emit WarrantyCardTransferred(tokenId, to);
