@@ -14,7 +14,6 @@
   border: none;
   text-decoration: none;
   text-transform: capitalize;
-  transition: all 0.2s linear;
 }
 
 html {
@@ -282,6 +281,7 @@ header .icons a:hover {
 }
 .products .box-container .box {
   position: relative;
+  transition: all 0.2s linear;
 }
 
 .products .box-container .box .alert {
@@ -326,6 +326,7 @@ header .icons a:hover {
   transition: 200ms;
   flex: 0 0 30rem;
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.1));
+  transition: all 0.2s linear;
 }
 .products .box-container .box:hover {
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.252));
@@ -339,6 +340,7 @@ header .icons a:hover {
   transform: rotate(-35deg);
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.1));
   margin: 8rem 2rem;
+  transition: all 0.2s linear;
 }
 
 .products .box-container .box:hover img {
@@ -487,9 +489,10 @@ header .icons a:hover {
 
 .featured .row .image-container .big-image img {
   width: 100%;
+  transition: all 0.2s linear;
 }
 
-.featured .row .image-container .big-image img:hover {
+.featured .row:hover .image-container .big-image img {
   transform: scale(1.05);
 }
 
