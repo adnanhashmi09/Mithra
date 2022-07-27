@@ -526,6 +526,18 @@ span.text-red {
   color: #324d67;
 }
 
+.leftImages.sold > *:not(.image-container) {
+  opacity: 0.3;
+}
+
+.leftImages.sold .image-container img {
+  opacity: 0.3;
+}
+
+.image-container {
+  position: relative;
+}
+
 .product-detail-image {
   border-radius: 15px;
   background-color: #ebebeb;

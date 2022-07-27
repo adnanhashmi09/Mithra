@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AiOutlineMinus,
   AiOutlinePlus,
@@ -9,27 +9,69 @@ import {
 import { client, urlFor } from '../../lib/client';
 import { Product } from '../../components';
 import { useStateContext } from '../../context/StateContext';
+import toast from 'react-hot-toast';
+import getStripe from '../../lib/getStripe';
+
+const styles = {
+  position: 'absolute',
+  top: '30%',
+  left: '50%',
+  transform: 'rotate(-45deg) translate(-50%, -50%)',
+  fontWeight: 'bold',
+  fontSize: '70px',
+  color: '#c50f0f',
+  display: 'block',
+};
 
 const ProductDetails = ({ product, products }) => {
-  const { image, name, details, price } = product;
+  const { image, name, details, price, sold } = product;
   const [index, setIndex] = useState(0);
-  const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
+  const { qty } = useStateContext();
+  console.log(sold);
+  const productSold = () => {
+    client
+      .patch(product._id)
+      .set({ sold: true })
+      .commit()
+      .then((updatedBike) => {
+        console.log('Hurray, the bike is updated! New document:');
+        console.log(updatedBike);
+      })
+      .catch((err) => {
+        console.error('Oh no, the update failed: ', err.message);
+      });
+  };
+  const handleBuyNow = async () => {
+    productSold();
+    const stripe = await getStripe();
+    const gas = 20;
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([{ product, qty, gas }]),
+    });
 
-  const handleBuyNow = () => {
-    onAdd(product, qty);
+    if (response.statusCode === 500) return;
 
-    setShowCart(true);
+    const data = await response.json();
+
+    toast.loading('Redirecting...');
+
+    stripe.redirectToCheckout({ sessionId: data.id });
   };
 
   return (
     <div>
       <div className="product-detail-container">
-        <div>
+        <div className={`leftImages ${sold ? 'sold' : ''}`}>
           <div className="image-container">
             <img
               src={urlFor(image && image[index])}
               className="product-detail-image"
             />
+            <span style={sold ? styles : { display: 'none' }}>SOLD</span>
           </div>
           <div className="small-images-container">
             {image?.map((item, i) => (
@@ -59,20 +101,12 @@ const ProductDetails = ({ product, products }) => {
           </div>
           <h4>Details: </h4>
           <p>{details}</p>
-          <p className="price">${price}</p>
-          <div className="quantity">
-            <h3>Quantity:</h3>
-            <p className="quantity-desc">
-              <span className="minus" onClick={decQty}>
-                <AiOutlineMinus />
-              </span>
-              <span className="num">{qty}</span>
-              <span className="plus" onClick={incQty}>
-                <AiOutlinePlus />
-              </span>
-            </p>
-          </div>
-          <div className="buttons">
+          <p className="price">₹ {price}</p>
+
+          <div
+            className="buttons"
+            style={sold ? { opacity: 0.3, pointerEvents: 'none' } : {}}
+          >
             <button type="button" className="buy-now" onClick={handleBuyNow}>
               Buy Now
             </button>

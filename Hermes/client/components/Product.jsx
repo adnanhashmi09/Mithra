@@ -3,8 +3,7 @@ import Link from 'next/link';
 
 import { urlFor } from '../lib/client';
 
-const Product = ({ product: { image, name, slug, price } }) => {
-  const sold = false;
+const Product = ({ product: { image, name, slug, price, sold } }) => {
   return (
     <div>
       <Link href={`${sold ? '' : `/product/${slug.current}`}`}>
@@ -19,7 +18,7 @@ const Product = ({ product: { image, name, slug, price } }) => {
             <span>SOLD</span>
           </div>
           <p className="product-name">{name}</p>
-          <p className="product-price">${price}</p>
+          <p className="product-price">₹ {price}</p>
         </div>
       </Link>
     </div>
