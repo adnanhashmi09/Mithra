@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
 
 :root {
   --black: #2c2c54;
@@ -6,7 +6,7 @@
 }
 
 * {
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -280,6 +280,41 @@ header .icons a:hover {
   flex-wrap: wrap;
   gap: 1.5rem;
 }
+.products .box-container .box {
+  position: relative;
+}
+
+.products .box-container .box .alert {
+  font-size: 60px;
+  font-weight: bold;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(189, 13, 13);
+  display: none;
+}
+
+.products .box-container .box.sold > *:not(.alert) {
+  opacity: 0.3;
+}
+
+.products .box-container .box.sold .alert {
+  display: block;
+}
+
+.products .box-container .box.sold {
+  cursor: not-allowed;
+}
+
+.products .box-container .box.sold .btn,
+.products .box-container .box.sold .latestImage {
+  pointer-events: none !important;
+}
+
+.products .box-container .box.sold:hover img {
+  transform: rotate(-35deg) scale(1);
+}
 
 .products .box-container .box {
   border: 0rem solid rgba(0, 0, 0, 0.1);
@@ -289,7 +324,7 @@ header .icons a:hover {
   overflow: hidden;
   background: #f9f9f9;
   transition: 200ms;
-  flex: 1 1 30rem;
+  flex: 0 0 30rem;
   filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.1));
 }
 .products .box-container .box:hover {
@@ -378,6 +413,45 @@ header .icons a:hover {
   padding: 2rem;
   align-items: center;
   margin: 1.5rem 0;
+}
+
+.featured .row .image-container {
+  position: relative;
+}
+
+.featured .row.sold > *:not(.image-container) {
+  opacity: 0.3;
+}
+
+.featured .row.sold .image-container .big-image {
+  opacity: 0.3;
+}
+
+.featured .row .alert {
+  font-size: 90px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(189, 13, 13);
+  display: none;
+}
+
+.featured .row.sold .alert {
+  display: unset;
+}
+
+.featured .row.sold {
+  cursor: not-allowed;
+}
+
+.featured .row.sold .btn {
+  pointer-events: none;
+}
+
+.featured .row.sold .big-image {
+  pointer-events: none;
 }
 
 .featured .row .content {
@@ -537,6 +611,14 @@ header .icons a:hover {
 
 .newsletter .content form .btn {
   border-radius: 0;
+}
+
+.footer {
+  text-align: center;
+  font-size: 15px;
+  padding: 30px 0 30px 0;
+  margin-top: 80px;
+  background-color: #ebebeb;
 }
 
 .footer .box-container {

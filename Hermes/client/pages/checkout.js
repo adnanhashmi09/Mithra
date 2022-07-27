@@ -1,7 +1,8 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Link from "next/link";
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
+import Link from 'next/link';
+import Navbar from '../components/Navbar';
 export default function Home() {
   return (
     <div classNameName={styles.container}>
@@ -15,28 +16,7 @@ export default function Home() {
         />
       </Head>
 
-      <header>
-        <div id="menu-bar" className="fas fa-bars"></div>
-
-        <Link href="/">
-          <a className="logo">NFTkart</a>
-        </Link>
-
-        <nav className="navbar">
-          <a href="#home">home</a>
-          <a href="#products">products</a>
-          <a href="#featured">featured</a>
-          <a href="#review">review</a>
-        </nav>
-
-        <div className="icons">
-          <a href="#" className="fas fa-heart"></a>
-          <Link href="/checkout">
-            <a href="#" className="fas fa-shopping-cart"></a>
-          </Link>
-          <a href="#" className="fas fa-user"></a>
-        </div>
-      </header>
+      <Navbar />
       <div className="checkout_main">
         <div className="checkout_left">
           <div className="box">
