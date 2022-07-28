@@ -65,7 +65,24 @@ func (mh *MongoHandler) AddToken(NFT *Token) (*mongo.InsertOneResult, error) {
 	return result, err
 }
 
-func (mh *MongoHandler) UpdateToken(filter interface{}, update interface{}) (*mongo.SingleResult, error) {
+func (mh *MongoHandler) UpdateToken(filter interface{}, update interface{}) (*mongo.UpdateResult, error) {
+	upsert := true
+	opts := options.UpdateOptions{
+		Upsert: &upsert,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), TimeOut)
+	defer cancel()
+
+	result, err := tokenCollection.UpdateOne(ctx, filter, update, &opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (mh *MongoHandler) UpdateSingleToken(filter interface{}, update interface{}) (*mongo.SingleResult, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), TimeOut)
 	defer cancel()
 

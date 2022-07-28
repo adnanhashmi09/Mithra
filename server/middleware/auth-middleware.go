@@ -26,7 +26,7 @@ type Auth struct {
 	UserType   string `json:"userType"`
 }
 
-func VerifyTokenOwner(next http.Handler) http.Handler {
+func VerifyAddress(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			auth := Auth{}
@@ -61,7 +61,7 @@ func VerifyTokenOwner(next http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), controllers.Key("user"), pubAddress)
+			ctx := context.WithValue(r.Context(), controllers.Key("address"), pubAddress)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		},
 	)

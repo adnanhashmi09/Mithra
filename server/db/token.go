@@ -20,6 +20,7 @@ type Token struct {
 	Nonce          string        `json:"nonce" bson:"nonce"`
 	ProductId      string        `json:"productId" bson:"productId"`
 	Brand          string        `json:"brand" bson:"brand"`
+	BrandAddress   string        `json:"brandAddress" bson:"brandAddress"`
 	MetaHash       string        `json:"metaHash" bson:"metaHash"`
 	TokenURI       string        `json:"tokenUri" bson:"tokenUri"`
 	Minter         string        `json:"minter,omitempty" bson:"minter,omitempty"`
