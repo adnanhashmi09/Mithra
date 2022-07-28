@@ -1,5 +1,5 @@
 // Mock Review Comment
-import React from "react";
+import React from 'react';
 
 // function [slug]() {
 //   return (
@@ -9,12 +9,13 @@ import React from "react";
 
 // export default [slug]
 
-import { useRouter } from "next/router";
-import Navbar from "../../components/Navbar";
-import styles from "../../styles/Nftpage.module.css";
+import { useRouter } from 'next/router';
+import Navbar from '../../components/Navbar';
+import styles from '../../styles/Nftpage.module.css';
 
-import Footer from "../../components/Footer";
-import Image from "next/image";
+import Footer from '../../components/Footer';
+import Image from 'next/image';
+import Head from 'next/head';
 
 const Slug = () => {
   const router = useRouter();
@@ -22,6 +23,11 @@ const Slug = () => {
 
   return (
     <>
+      <Head>
+        <title>मिthra</title>
+        <meta name="description" content="Blockchain based warranties" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.container}>
         <Navbar underline="warranty" />
         <div className={styles.main_div}>
@@ -37,8 +43,8 @@ const Slug = () => {
               <div className={styles.time}>
                 <Image
                   src="/time.png"
-                  height="10px"
-                  width="10px"
+                  height="15px"
+                  width="15px"
                   className={styles.image_clock}
                 ></Image>
               </div>
@@ -113,8 +119,8 @@ const Slug = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

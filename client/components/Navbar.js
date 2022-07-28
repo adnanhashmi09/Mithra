@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import styles from "../styles/Navbar.module.css";
-import Link from "next/link";
-import Image from "next/image";
+import React, { useState } from 'react';
+import styles from '../styles/Navbar.module.css';
+import Link from 'next/link';
+import Image from 'next/image';
 
 function Navbar(props) {
   const und = props.underline;
@@ -17,13 +17,13 @@ function Navbar(props) {
       <div className={styles.father}>
         <div className={styles.main}>
           <Link href="/">
-            <div className={styles.logo}>NFTkart</div>
+            <div className={styles.logo}>मिthra</div>
           </Link>
 
           <div className={styles.responsive}>
             <div
               className={`${styles.hamburger} ${
-                isActive ? styles.isactive : ""
+                isActive ? styles.isactive : ''
               } `}
               id={styles.hamboorger}
               onClick={toggleClass}
@@ -40,10 +40,10 @@ function Navbar(props) {
                 <Link href="/">
                   <li>
                     Home
-                    {und === "home" ? (
+                    {und === 'home' ? (
                       <div className={styles.underline}></div>
                     ) : (
-                      ""
+                      ''
                     )}
                   </li>
                 </Link>
@@ -60,29 +60,26 @@ function Navbar(props) {
                 <Link href="/brand">
                   <li>
                     Brand
-                    {und === "brand" ? (
+                    {und === 'brand' ? (
                       <div className={styles.underline}></div>
                     ) : (
-                      ""
+                      ''
                     )}
                   </li>
                 </Link>
                 <Link href="/warranty">
                   <li>
-                    Warranty{" "}
-                    {und === "warranty" ? (
+                    Warranty{' '}
+                    {und === 'warranty' ? (
                       <div className={styles.underline}></div>
                     ) : (
-                      ""
+                      ''
                     )}
                   </li>
                 </Link>
               </ul>
             </div>
             <div className={styles.search}>
-              <div className={styles.search_image}>
-                <Image src="/search.jpeg" width={18} height={18}></Image>
-              </div>
               <button>Connect Wallet</button>
             </div>
           </div>
@@ -97,10 +94,10 @@ function Navbar(props) {
               <Link href="/">
                 <li>
                   Home
-                  {und === "home" ? (
+                  {und === 'home' ? (
                     <div className={styles.underline}></div>
                   ) : (
-                    ""
+                    ''
                   )}
                 </li>
               </Link>
@@ -116,21 +113,21 @@ function Navbar(props) {
               </Link> */}
               <Link href="/brand">
                 <li>
-                  Brand{" "}
-                  {und === "brand" ? (
+                  Brand{' '}
+                  {und === 'brand' ? (
                     <div className={styles.underline}></div>
                   ) : (
-                    ""
+                    ''
                   )}
                 </li>
               </Link>
               <Link href="/warranty">
                 <li>
                   Warranty
-                  {und === "warranty" ? (
+                  {und === 'warranty' ? (
                     <div className={styles.underline}></div>
                   ) : (
-                    ""
+                    ''
                   )}
                 </li>
               </Link>

@@ -1,14 +1,19 @@
-import Head from "next/head";
-import styles from "../../styles/Warranty.module.css";
-import Link from "next/link";
-import Navbar from "../../components/Navbar";
-import Image from "next/image";
-import Arrow from "../../assets/Arrow 2.png";
-import Footer from "../../components/Footer";
+import Head from 'next/head';
+import styles from '../../styles/Warranty.module.css';
+import Link from 'next/link';
+import Navbar from '../../components/Navbar';
+import Image from 'next/image';
+import Arrow from '../../assets/Arrow 2.png';
+import Footer from '../../components/Footer';
 
 function warranty() {
   return (
     <>
+      <Head>
+        <title>मिthra</title>
+        <meta name="description" content="Blockchain based warranties" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.container}>
         <Navbar underline="warranty" />
         <div className={styles.main}>
@@ -95,8 +100,8 @@ function warranty() {
             </form>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }

@@ -1,19 +1,25 @@
-import React from "react";
-import Navbar from "../../components/Navbar";
-import styles from "../../styles/Brand.module.css";
-import Image from "next/image";
-import Footer from "../../components/Footer";
-import Link from "next/link";
+import React from 'react';
+import Navbar from '../../components/Navbar';
+import styles from '../../styles/Brand.module.css';
+import Image from 'next/image';
+import Footer from '../../components/Footer';
+import Link from 'next/link';
+import Head from 'next/head';
 function brand() {
   return (
     <>
+      <Head>
+        <title>मिthra</title>
+        <meta name="description" content="Blockchain based warranties" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.container}>
         <Navbar underline="brand" />
         <div className={styles.main}>
           <div className={styles.left}>
             <div className={styles.heading}>
               <h1>
-                Register & Connect your Brand with Us !!
+                Register & Deploy a contract with us !!
                 <div className={styles.purple_box}></div>
               </h1>
             </div>

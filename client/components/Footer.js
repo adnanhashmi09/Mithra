@@ -7,7 +7,7 @@ function Footer() {
   return (
     <>
       <footer className={styles.foot}>
-        <h4>Copyright NFTkart . All Rights Reserved</h4>
+        <h4>Copyright मिthra . All Rights Reserved</h4>
       </footer>
     </>
   );
