@@ -16,7 +16,7 @@ type MongoHandler struct {
 }
 
 var (
-	defaultDB = "CryptoChasm"
+	defaultDB = "warranty"
 	TimeOut   = time.Second * 10
 )
 
