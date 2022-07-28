@@ -70,9 +70,12 @@ function warranty() {
                 <div className={styles.hashtag}>
                   <Image src="/user.png" height="24px" width="24px"></Image>
                 </div>
-                <h3>Your Name</h3>
+                <h3>Wallet address</h3>
                 <div className={styles.gradient}>
-                  <input type="text" placeholder="John Doe" />
+                  <input
+                    type="text"
+                    placeholder="0xb794f5ea0ba39494ce839613fffba74279579268"
+                  />
                 </div>
               </div>
               <div className={styles.product_date}>

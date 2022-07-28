@@ -60,6 +60,24 @@ function brand() {
                   <input type="text" placeholder="Nike Shoes Co." />
                 </div>
               </div>
+              <div className={styles.product_name}>
+                <div className={styles.hashtag}>
+                  <Image src="/calendar.png" height="24px" width="24px"></Image>
+                </div>
+                <h3>Token Name</h3>
+                <div className={styles.gradient}>
+                  <input type="text" placeholder="NIKE" />
+                </div>
+              </div>
+              <div className={styles.product_name}>
+                <div className={styles.hashtag}>
+                  <Image src="/product.png" height="22px" width="22px"></Image>
+                </div>
+                <h3>Token Symbol</h3>
+                <div className={styles.gradient}>
+                  <input type="text" placeholder="NKE" />
+                </div>
+              </div>
               <div className={styles.product_date}>
                 <div className={styles.hashtag}>
                   <Image src="/calendar.png" height="24px" width="24px"></Image>
@@ -69,7 +87,7 @@ function brand() {
                   <input type="email" placeholder="mybrand@domain.com" />
                 </div>
               </div>
-              <div className={styles.product_name}>
+              {/* <div className={styles.product_name}>
                 <div className={styles.hashtag}>
                   <Image src="/product.png" height="22px" width="22px"></Image>
                 </div>
@@ -77,7 +95,7 @@ function brand() {
                 <div className={styles.gradient}>
                   <input type="text" placeholder="***********" />
                 </div>
-              </div>
+              </div> */}
 
               <div className={styles.submit}>
                 <button>Register</button>
