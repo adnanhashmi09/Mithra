@@ -1,0 +1,157 @@
+.box {
+  background-color: rgba(14, 8, 50, 0.695);
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  width: 70%;
+  margin-top: 2rem;
+  flex-grow: 1;
+  padding: 1.8rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.image {
+  border-radius: 0.3rem;
+}
+.content {
+  margin-left: 2rem;
+  display: flex;
+
+  flex-direction: row;
+}
+
+.content h1 {
+  font-size: 2.7rem;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.minter {
+  margin-top: 0;
+}
+.minter h5 {
+  font-weight: 300;
+  font-size: 1.1rem;
+  color: #aba9a9;
+  margin: 0;
+}
+
+.owner h5 {
+  font-weight: 300;
+  margin: 0;
+
+  font-size: 1.1rem;
+  color: #aba9a9;
+}
+.price h5 {
+  font-weight: 300;
+  margin: 0;
+
+  font-size: 1.1rem;
+  color: #aba9a9;
+}
+.desc h5 {
+  font-weight: 300;
+  margin: 0;
+
+  font-size: 1.1rem;
+  color: #aba9a9;
+}
+
+.minter p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+
+.owner p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+.price p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+.desc p {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  margin-bottom: 18px;
+}
+
+.desc {
+  max-width: 30vw;
+}
+.lesgo {
+  display: flex;
+  flex-direction: row;
+}
+
+.submit {
+  margin: auto;
+  margin-left: 2rem;
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+}
+.box button {
+  padding: 1rem;
+  cursor: pointer;
+  margin-top: 2.5rem;
+  border-radius: 30rem;
+  color: white;
+  padding: 0.7rem 2.5rem;
+  background-color: #0a0623;
+
+  /*border: 2px solid white; */
+  border: solid 2px transparent;
+  font-family: 'Titillium Web';
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(101deg, #78e4ff, #ff48fa);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #0a0623 inset;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: 200ms ease-in all;
+}
+
+.box button:hover {
+  box-shadow: none;
+  color: white;
+}
+
+@media only screen and (max-width: 780px) {
+  .buttonflex {
+    display: flex;
+    flex-direction: row;
+  }
+  .imgdiv {
+    align-items: center;
+    text-align: center;
+  }
+  .content {
+    margin-top: 1rem;
+    align-items: center;
+    flex-direction: column;
+  }
+  .box {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 440px) {
+  .buttonflex {
+    display: flex;
+    flex-direction: column;
+  }
+}

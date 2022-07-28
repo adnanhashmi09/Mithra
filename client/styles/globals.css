@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;200;400;600&family=Titillium+Web:wght@200;300;400;600;700;900&display=swap');
+html,
+body {
+  margin: 0;
+  font-family: 'Titillium Web';
+  background-color: #0a0623;
+  color: white;
+}
+
+/* body {
+  position: absolute;
+  min-height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+} */
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
