@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/rs/cors"
-	"hermes.com/controllers"
+	"warranty.com/controllers"
 )
 
 func RouterInit() http.Handler {

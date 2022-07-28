@@ -16,14 +16,14 @@ type MongoHandler struct {
 }
 
 var (
-	defaultDB = "hermes"
+	defaultDB = "warranty"
 	TimeOut   = time.Second * 10
 )
 
 var (
-	mh                *MongoHandler
-	userCollection    *mongo.Collection
-	productCollection *mongo.Collection
+	mh              *MongoHandler
+	tokenCollection *mongo.Collection
+	brandCollection *mongo.Collection
 )
 
 func NewMongoHandler(address string) (*MongoHandler, error) {
@@ -50,8 +50,8 @@ func NewMongoHandler(address string) (*MongoHandler, error) {
 		database: defaultDB,
 	}
 
-	userCollection = mh.client.Database(mh.database).Collection("users")
-	productCollection = mh.client.Database(mh.database).Collection("products")
+	brandCollection = mh.client.Database(mh.database).Collection("brands")
+	tokenCollection = mh.client.Database(mh.database).Collection("tokens")
 
 	return mh, nil
 }
