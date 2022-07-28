@@ -8,9 +8,10 @@ import {
 
 import { client, urlFor } from '../../lib/client';
 import { Product } from '../../components';
-import { useStateContext } from '../../context/StateContext';
 import toast from 'react-hot-toast';
 import getStripe from '../../lib/getStripe';
+import { useStateContext } from '../../context/StateContext';
+import useCheckWeb3Support from '../../hooks/checkWeb3Support';
 
 const styles = {
   position: 'absolute',
@@ -26,15 +27,16 @@ const styles = {
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price, sold } = product;
   const [index, setIndex] = useState(0);
-  const { qty } = useStateContext();
+  const { qty, address } = useStateContext();
   console.log(sold);
+
+  useCheckWeb3Support();
   const productSold = () => {
     client
       .patch(product._id)
-      .set({ sold: true })
+      .set({ sold: true, approvalStatus: false, owner: address })
       .commit()
       .then((updatedBike) => {
-        console.log('Hurray, the bike is updated! New document:');
         console.log(updatedBike);
       })
       .catch((err) => {
@@ -42,6 +44,10 @@ const ProductDetails = ({ product, products }) => {
       });
   };
   const handleBuyNow = async () => {
+    if (address === '') {
+      toast.error('please connect to metamask');
+      return;
+    }
     productSold();
     const stripe = await getStripe();
     const gas = 20;

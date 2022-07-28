@@ -1,9 +1,32 @@
 import React from 'react';
 import Link from 'next/link';
 
-import { urlFor } from '../lib/client';
+import { client, urlFor } from '../lib/client';
+import { useStateContext } from '../context/StateContext';
+import toast from 'react-hot-toast';
 
-const UserProduct = ({ product: { image, name, slug, price } }) => {
+const UserProduct = ({
+  product: { image, name, approvalStatus, price, _id },
+  setReload,
+  reload,
+}) => {
+  const { qty, address } = useStateContext();
+  const productSold = () => {
+    return client
+      .patch(_id)
+      .set({ sold: false, approvalStatus: false, owner: ' ' })
+      .commit();
+  };
+
+  const handleResale = async () => {
+    const myPromise = productSold();
+    await toast.promise(myPromise, {
+      loading: 'Listing in the market...',
+      success: 'Listed successfully',
+      error: 'Error ',
+    });
+    setReload(!reload);
+  };
   return (
     <div>
       <div className={`my-item`}>
@@ -18,8 +41,15 @@ const UserProduct = ({ product: { image, name, slug, price } }) => {
         <div className="text">
           <p className="product-name">{name}</p>
           <p className="product-warranty">
-            Warranty Card Minted: <span className="pending">Pending</span>
-            {/* approved | pending */}
+            {approvalStatus === true ? (
+              <>
+                Warranty Card Minted: <span className="approved">Approved</span>
+              </>
+            ) : (
+              <>
+                Warranty Card Minted: <span className="pending">Pending</span>
+              </>
+            )}
           </p>
           <a
             href="https://etherscan.io/address/0x0676d673a2a0a13fe37a3ec7812a8ccc571ca07b"
@@ -28,7 +58,7 @@ const UserProduct = ({ product: { image, name, slug, price } }) => {
             63FaC9201494f0bd17B9892B9fae4d52fe3BD377
           </a>
           <div className="buttons">
-            <button type="button" className="buy-now">
+            <button type="button" className="buy-now" onClick={handleResale}>
               Re-sell
             </button>
           </div>

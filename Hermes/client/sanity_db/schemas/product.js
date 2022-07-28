@@ -41,5 +41,25 @@ export default {
       title: 'Sold',
       type: 'boolean',
     },
+    {
+      name: 'owner',
+      title: 'Owner',
+      type: 'string',
+    },
+    {
+      name: 'warrantyPeriod',
+      title: 'Warranty Period',
+      type: 'string',
+    },
+    {
+      name: 'brand',
+      title: 'Brand',
+      type: 'string',
+    },
+    {
+      name: 'approvalStatus',
+      title: 'Approval Status',
+      type: 'boolean',
+    },
   ],
 };

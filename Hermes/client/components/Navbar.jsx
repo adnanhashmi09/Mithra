@@ -6,7 +6,7 @@ import { Cart } from './';
 import { useStateContext } from '../context/StateContext';
 
 const Navbar = () => {
-  const { showCart, setShowCart, totalQuantities } = useStateContext();
+  const { address } = useStateContext();
 
   return (
     <div className="navbar-container">
@@ -26,7 +26,20 @@ const Navbar = () => {
         // onClick={() => setShowCart(true)}
       >
         <a className="nav-my-items">
-          <AiOutlineUser className="cart-icon" /> My Items
+          {address === '' ? (
+            <>
+              <AiOutlineUser className="cart-icon" /> My Items
+            </>
+          ) : (
+            <>
+              <img
+                src={`https://avatars.dicebear.com/api/miniavs/${address}.svg`}
+                alt="user"
+                height={40}
+              />
+              My Items
+            </>
+          )}
         </a>
         {/* <span className="cart-item-qty">{totalQuantities}</span> */}
       </Link>

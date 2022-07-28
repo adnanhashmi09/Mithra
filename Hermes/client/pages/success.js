@@ -4,15 +4,12 @@ import { BsBagCheckFill } from 'react-icons/bs';
 
 import { useStateContext } from '../context/StateContext';
 import { runFireworks } from '../lib/utils';
+import useCheckWeb3Support from '../hooks/checkWeb3Support';
 
 const Success = () => {
-  const { setCartItems, setTotalPrice, setTotalQuantities } = useStateContext();
-
+  const { address } = useStateContext();
+  useCheckWeb3Support();
   useEffect(() => {
-    localStorage.clear();
-    setCartItems([]);
-    setTotalPrice(0);
-    setTotalQuantities(0);
     runFireworks();
   }, []);
 

@@ -18,11 +18,14 @@ a {
 
 .main-container {
   max-width: 1400px;
-  margin: auto;
+  margin: 0 auto;
   width: 100%;
 }
 .layout {
   padding: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
 }
 
 .navbar-container {
@@ -393,7 +396,9 @@ span.text-red {
   padding: 40px 10px;
   position: relative;
 }
-
+footer {
+  margin-top: auto;
+}
 .footer-container {
   color: #324d67;
   text-align: center;
