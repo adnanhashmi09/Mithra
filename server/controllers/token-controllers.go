@@ -20,6 +20,7 @@ type TokenArr struct {
 type TokenResponse struct {
 	Status   string    `json:"status,omitempty"`
 	Failure  bool      `json:"failure,omitempty"`
+	Brand    string    `json:"brand,omitempty"`
 	Tokens   *TokenArr `json:"tokens,omitempty"`
 	Response db.Token  `json:"response,omitempty"`
 	Nonce    string    `json:"nonce,omitempty"`
@@ -29,7 +30,14 @@ func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
 	token := &db.Token{}
 	json.NewDecoder(r.Body).Decode(&token)
 
-	tokens := mh.GetTokens(bson.M{"brand": token.Brand})
+	brand := &db.Brand{}
+	err := mh.GetSingleBrand(brand, bson.M{"ethAddress": token.BrandAddress})
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	tokens := mh.GetTokens(bson.M{"brandAddress": token.BrandAddress})
 
 	approved := []*db.Token{}
 	unapproved := []*db.Token{}
@@ -51,6 +59,7 @@ func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
 		Status:  "success",
 		Failure: false,
 		Tokens:  result,
+		Brand:   brand.Name,
 	})
 }
 
