@@ -43,8 +43,8 @@ const Slug = () => {
               <div className={styles.time}>
                 <Image
                   src="/time.png"
-                  height="10px"
-                  width="10px"
+                  height="15px"
+                  width="15px"
                   className={styles.image_clock}
                 ></Image>
               </div>
