@@ -2,7 +2,7 @@
   padding: 0 2rem;
   margin: auto;
 
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 .main_div {
@@ -37,7 +37,7 @@
   position: absolute;
   font-weight: 100;
   font-size: 10px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   right: 33px;
   bottom: 0px;
 }
@@ -130,7 +130,7 @@
 
   /*border: 2px solid white; */
   border: solid 2px transparent;
-  font-family: "Titillium Web";
+  font-family: 'Titillium Web';
   background-image: linear-gradient(
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0)

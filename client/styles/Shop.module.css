@@ -1,7 +1,7 @@
 .containers {
   padding: 0 2rem;
   margin: auto;
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 .herobanner {
@@ -27,7 +27,7 @@
 .hero_left h2 {
   font-weight: 400;
   margin: 0;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 2.5rem;
   color: rgba(139, 214, 255, 0.8);
 }
@@ -43,7 +43,7 @@
   cursor: pointer;
   border: 0px solid;
   border-radius: 10rem;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   background-color: rgba(139, 214, 255, 0.8);
   color: white;
   transition: 300ms ease-in;
@@ -98,7 +98,7 @@
   .hero_left h2 {
     font-weight: 400;
     margin: 0;
-    font-family: "Poppins";
+    font-family: 'Poppins';
     font-size: 1.5rem;
     color: rgba(139, 214, 255, 0.8);
   }
@@ -195,7 +195,7 @@
   color: rgba(255, 255, 255, 0.831);
 
   font-size: 1rem;
-  font-family: "Titillium Web";
+  font-family: 'Titillium Web';
 }
 .gradient {
   background-image: linear-gradient(to right, #9718f8, #a3c9e2 100%);
@@ -261,7 +261,7 @@
 
   /*border: 2px solid white; */
   border: solid 2px transparent;
-  font-family: "Titillium Web";
+  font-family: 'Titillium Web';
   background-image: linear-gradient(
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0)
@@ -297,7 +297,7 @@
     padding: 0 1rem;
     margin: auto;
 
-    max-width: 1200px;
+    max-width: 1400px;
   }
 
   .main {

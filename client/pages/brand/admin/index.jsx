@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import Navbar from "../../../components/Navbar";
-import styles from "../../../styles/BrandLogin.module.css";
-import Image from "next/image";
-import Footer from "../../../components/Footer";
-import Link from "next/link";
+import React, { useState } from 'react';
+import Navbar from '../../../components/Navbar';
+import styles from '../../../styles/BrandLogin.module.css';
+import Image from 'next/image';
+import Footer from '../../../components/Footer';
+import Link from 'next/link';
+import Head from 'next/head';
 function Admin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     console.log(email, password);
@@ -16,6 +17,11 @@ function Admin() {
 
   return (
     <>
+      <Head>
+        <title>मिthra</title>
+        <meta name="description" content="Blockchain based warranties" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.container}>
         <Navbar underline="brand" />
         <div className={styles.main}>
