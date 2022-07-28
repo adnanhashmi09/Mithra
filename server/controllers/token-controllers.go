@@ -76,16 +76,57 @@ func GetToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	address := r.Context().Value(Key("user"))
-	if address != token.Owner {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
 	json.NewEncoder(w).Encode(token)
 }
 
 func ApproveToken(w http.ResponseWriter, r *http.Request) {
+	token := &db.Token{}
+	json.NewDecoder(r.Body).Decode(&token)
+
+	presentToken := &db.Token{}
+	err := mh.GetSingleToken(presentToken, bson.M{"productId": token.ProductId})
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	address := fmt.Sprint(r.Context().Value(Key("address")))
+	if token.MetaHash == "" {
+		metaRsp, err := MintToken(token)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+		token.MetaHash = metaRsp.IpfsHash
+		token.MintedOn = metaRsp.Timestamp
+		token.Minter = address
+	}
+
+	if token.Minter != address {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	token.Transactions = append(token.Transactions, presentToken.Transactions...)
+	token.Transactions = append(token.Transactions, token.Approval)
+	token.ApprovalStatus = true
+
+	_, err = mh.ReplaceToken(token, bson.M{"metaHash": token.MetaHash})
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(
+		TokenResponse{
+			Status:  "success",
+			Failure: false,
+		},
+	)
+}
+
+func RegisterToken(w http.ResponseWriter, r *http.Request) {
 	token := &db.Token{}
 	json.NewDecoder(r.Body).Decode(&token)
 
@@ -107,9 +148,7 @@ func ApproveToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token.Transactions = append(token.Transactions, presentToken.Transactions...)
-	token.Transactions = append(token.Transactions, token.Approval)
-	token.ApprovalStatus = true
-	token.Approval = db.Transaction{}
+	token.ApprovalStatus = false
 
 	_, err = mh.ReplaceToken(token, bson.M{"metaHash": token.MetaHash})
 	if err != nil {
@@ -176,7 +215,7 @@ func GenTokenNonce(ethAddress string) (string, error) {
 	}
 
 	filter := bson.M{"ethAddress": ethAddress}
-	updateResult, err := mh.UpdateToken(filter, bson.M{"$set": bson.M{"nonce": nonce}})
+	updateResult, err := mh.UpdateSingleToken(filter, bson.M{"$set": bson.M{"nonce": nonce}})
 	if err != nil {
 		return oldNonce, err
 	}

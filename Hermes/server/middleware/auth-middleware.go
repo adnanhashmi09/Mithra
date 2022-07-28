@@ -10,13 +10,12 @@ import (
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	"warranty.com/controllers"
+	"hermes.com/controllers"
 )
 
 var (
 	NonceGenerator = map[string]func(string) (string, error){
-		"brand": controllers.GenBrandNonce,
-		"token": controllers.GenTokenNonce,
+		"brand": controllers.GenUserNonce,
 	}
 )
 
@@ -26,7 +25,7 @@ type Auth struct {
 	UserType   string `json:"userType"`
 }
 
-func VerifyAddress(next http.Handler) http.Handler {
+func VerifyUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			auth := Auth{}
@@ -61,7 +60,7 @@ func VerifyAddress(next http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), controllers.Key("address"), pubAddress)
+			ctx := context.WithValue(r.Context(), controllers.Key("user"), pubAddress)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		},
 	)
