@@ -15,7 +15,7 @@ func RouterInit() http.Handler {
 	r.Use(cors.Default().Handler)
 
 	r.Route("/token", TokenRoutes)
-	r.Route("/user", UserRoutes)
+	r.Route("/brand", UserRoutes)
 
 	return r
 }

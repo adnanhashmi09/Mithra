@@ -7,5 +7,5 @@ import (
 
 func UserRoutes(r chi.Router) {
 	r.Get("/nonce/{ethaddress}", controllers.GetBrandNonce)
-	r.Get("/init/{ethaddress}", controllers.InitialiseBrand)
+	r.Post("/init/{ethaddress}", controllers.InitialiseBrand)
 }

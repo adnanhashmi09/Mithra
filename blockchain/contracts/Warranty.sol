@@ -18,7 +18,7 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     /// @dev state variables
     Counters.Counter private _tokenIdCounter; // keeps track of the ids of warranty cards
-    address approvedMarketAddress;
+    // address private approvedMarketAddress;
     address private contractOwner;
     mapping(string => uint256) public warrantyCount; // to track only one warranty card per ipfs hash
     mapping(uint256 => bool) private _hasWarrantyStarted;
@@ -31,8 +31,8 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
 
     mapping(uint256 => WarrantyPeriod) private warrantyPeriod;
 
-    constructor(string memory tokenName, string memory tokenSymbol, address _approvedMarketAddress) ERC721(tokenName, tokenSymbol) {
-        approvedMarketAddress = _approvedMarketAddress;
+    constructor(string memory tokenName, string memory tokenSymbol) ERC721(tokenName, tokenSymbol) {
+        // approvedMarketAddress = _approvedMarketAddress;
         contractOwner = msg.sender;
     }
 
@@ -62,10 +62,10 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
      * @dev The following modifier allows the market or the owner to call the function
     */ 
 
-    modifier onlyOwnerAndMarket{
-        require(owner() == _msgSender() || approvedMarketAddress == _msgSender(), "Ownable: caller is not the owner");
-        _;
-    }
+    // modifier onlyOwnerAndMarket{
+    //     require(owner() == _msgSender() || approvedMarketAddress == _msgSender(), "Ownable: caller is not the owner");
+    //     _;
+    // }
 
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
@@ -195,8 +195,6 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
            emit Attest(to, tokenId); 
         }else if(to == address(0)){
             emit Revoke(to, tokenId);
-        }else if(to == approvedMarketAddress){
-            emit MarketTranfer(to, tokenId);
         }
     }
 

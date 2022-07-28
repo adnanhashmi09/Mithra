@@ -71,7 +71,8 @@ func GetToken(w http.ResponseWriter, r *http.Request) {
 	if token.ProductId == "" {
 		filter = bson.M{
 			"name":     token.Name,
-			"metaHash": token.MetaHash,
+			"saleDate": token.SaleDate,
+			"owner":    token.Owner,
 		}
 	} else {
 		filter = bson.M{

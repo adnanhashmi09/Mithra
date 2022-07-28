@@ -5,8 +5,51 @@ import Navbar from '../../components/Navbar';
 import Image from 'next/image';
 import Arrow from '../../assets/Arrow 2.png';
 import Footer from '../../components/Footer';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
+import toast from 'react-hot-toast';
 
 function warranty() {
+  const [walletAddress, setWalletAddress] = useState('');
+  const [date, setDate] = useState('');
+  const [productName, setProductName] = useState('');
+  const [productId, setProductId] = useState('');
+
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let body;
+
+    if (productId !== '') {
+      body = JSON.stringify({ productId });
+    } else if (productName !== '' && walletAddress !== '' && date !== '') {
+      body = JSON.stringify({
+        name: productName,
+        owner: walletAddress,
+        saleDate: date,
+      });
+    } else {
+      toast.error('Please fill in all fields correctly');
+      return;
+    }
+
+    const response = await fetch('http://localhost:5050/token/single', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    });
+
+    const data = await response.json();
+    router.push(`/warranty/${data.productId}`);
+
+    console.log(data);
+  };
+
   return (
     <>
       <Head>
@@ -49,14 +92,19 @@ function warranty() {
             </div>
           </div>
           <div className={styles.right}>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className={styles.transaction_id}>
                 <div className={styles.hashtag}>
                   <Image src="/hashtag.png" height="24px" width="24px"></Image>
                 </div>
                 <h3>Product ID</h3>
                 <div className={styles.gradient}>
-                  <input type="text" placeholder="XY82Y****************" />
+                  <input
+                    value={productId}
+                    onChange={(e) => setProductId(e.target.value)}
+                    type="text"
+                    placeholder="XY82Y****************"
+                  />
                 </div>
               </div>
               <br></br>
@@ -73,6 +121,8 @@ function warranty() {
                 <h3>Wallet address</h3>
                 <div className={styles.gradient}>
                   <input
+                    value={walletAddress}
+                    onChange={(e) => setWalletAddress(e.target.value)}
                     type="text"
                     placeholder="0xb794f5ea0ba39494ce839613fffba74279579268"
                   />
@@ -84,7 +134,12 @@ function warranty() {
                 </div>
                 <h3>Date Of Purchase</h3>
                 <div className={styles.gradient}>
-                  <input type="text" placeholder="24 . 08 . 20XX" />
+                  <input
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    type="text"
+                    placeholder="24 . 08 . 20XX"
+                  />
                 </div>
               </div>
               <div className={styles.product_name}>
@@ -93,7 +148,12 @@ function warranty() {
                 </div>
                 <h3>Product Name</h3>
                 <div className={styles.gradient}>
-                  <input type="text" placeholder="Nike Air Jordans Uni Blue" />
+                  <input
+                    value={productName}
+                    onChange={(e) => setProductName(e.target.value)}
+                    type="text"
+                    placeholder="Nike Air Jordans Uni Blue"
+                  />
                 </div>
               </div>
 

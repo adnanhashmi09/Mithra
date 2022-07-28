@@ -88,11 +88,11 @@ const Slug = () => {
         <div className={styles.main_table}>
           <div className={styles.table}>
             <div className={styles.table_header}>
-              <div className={styles.header__item}>Name</div>
-              <div className={styles.header__item}>Wins</div>
-              <div className={styles.header__item}>Draws</div>
-              <div className={styles.header__item}>Losses</div>
-              <div className={styles.header__item}>Total</div>
+              <div className={styles.header__item}>Event</div>
+              <div className={styles.header__item}>From</div>
+              <div className={styles.header__item}>To</div>
+              <div className={styles.header__item}>Transaction Hash</div>
+              <div className={styles.header__item}>Date</div>
             </div>
             <div className={styles.table_content}>
               <div className={styles.table_row}>

@@ -31,4 +31,5 @@ type Token struct {
 	Approval       Transaction   `json:"approval" bson:"approval"`
 	ApprovalStatus bool          `json:"approvalStatus" bson:"approvalStatus"`
 	Transactions   []Transaction `json:"transactions" bson:"transactions"`
+	SaleDate       string        `json:"saleDate" bson:"saleDate"`
 }

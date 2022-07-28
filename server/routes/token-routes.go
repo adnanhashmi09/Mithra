@@ -7,7 +7,7 @@ import (
 )
 
 func TokenRoutes(r chi.Router) {
-	r.Get("/token", controllers.GetToken)
+	r.Post("/single", controllers.GetToken)
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.VerifyAddress)
 		r.Get("/all", controllers.GetTokensByBrand)
