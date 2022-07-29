@@ -43,11 +43,13 @@ function warranty() {
       },
       body: body,
     });
-
-    const data = await response.json();
-    router.push(`/warranty/${data.productId}`);
-
-    console.log(data);
+    console.log(response);
+    if (response.ok) {
+      const data = await response.json();
+      router.push(`/warranty/${data.productId}`);
+    } else {
+      toast.error('Entry not found');
+    }
   };
 
   return (

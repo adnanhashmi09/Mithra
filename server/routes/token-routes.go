@@ -10,7 +10,7 @@ func TokenRoutes(r chi.Router) {
 	r.Post("/single", controllers.GetToken)
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.VerifyAddress)
-		r.Get("/all", controllers.GetTokensByBrand)
+		r.Post("/all", controllers.GetTokensByBrand)
 		r.Post("/approve", controllers.ApproveToken)
 	})
 }

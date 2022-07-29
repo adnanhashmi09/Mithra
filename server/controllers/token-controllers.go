@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,8 +14,8 @@ import (
 )
 
 type TokenArr struct {
-	Approved   []*db.Token `json:"approved,omitempty"`
-	Unapproved []*db.Token `json:"unapproved,omitempty"`
+	Approved   []*db.Token `json:"approved"`
+	Unapproved []*db.Token `json:"unapproved"`
 }
 
 type TokenResponse struct {
@@ -27,17 +28,21 @@ type TokenResponse struct {
 }
 
 func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
-	token := &db.Token{}
-	json.NewDecoder(r.Body).Decode(&token)
-
+	// token := &db.Token{}
 	brand := &db.Brand{}
-	err := mh.GetSingleBrand(brand, bson.M{"ethAddress": token.BrandAddress})
+	// json.NewDecoder(r.Body).Decode(brand)
+
+	address := r.Context().Value(Key("address")).(string)
+
+	log.Println("Brand address {}", address)
+	err := mh.GetSingleBrand(brand, bson.M{"ethAddress": address})
+	fmt.Println("error", err)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
 
-	tokens := mh.GetTokens(bson.M{"brandAddress": token.BrandAddress})
+	tokens := mh.GetTokens(bson.M{"brandAddress": address})
 
 	approved := []*db.Token{}
 	unapproved := []*db.Token{}

@@ -13,17 +13,17 @@ import (
 	"warranty.com/controllers"
 )
 
-var (
-	NonceGenerator = map[string]func(string) (string, error){
-		"brand": controllers.GenBrandNonce,
-		"token": controllers.GenTokenNonce,
-	}
-)
+// var (
+// 	NonceGenerator = map[string]func(string) (string, error){
+// 		"brand": controllers.GenBrandNonce,
+// 		"token": controllers.GenTokenNonce,
+// 	}
+// )
 
 type Auth struct {
 	Signature  string `json:"signature,omitempty"`
 	EthAddress string `json:"ethAddress"`
-	UserType   string `json:"userType"`
+	// UserType   string `json:"userType"`
 }
 
 func VerifyAddress(next http.Handler) http.Handler {
@@ -32,7 +32,7 @@ func VerifyAddress(next http.Handler) http.Handler {
 			auth := Auth{}
 			json.NewDecoder(r.Body).Decode(&auth)
 
-			data, err := NonceGenerator[auth.UserType](auth.EthAddress)
+			data, err := controllers.GenBrandNonce(auth.EthAddress)
 			if err != nil {
 				http.Error(w, fmt.Sprintln(err), http.StatusBadRequest)
 				return
@@ -47,6 +47,7 @@ func VerifyAddress(next http.Handler) http.Handler {
 
 			message := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(data), data)
 			publicKey, err := crypto.SigToPub(crypto.Keccak256([]byte(message)), sigByte)
+			log.Println(publicKey)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
@@ -54,8 +55,8 @@ func VerifyAddress(next http.Handler) http.Handler {
 			}
 
 			derivedAddress := crypto.PubkeyToAddress(*publicKey).String()
+			log.Println(derivedAddress)
 			pubAddress := strings.ToLower(derivedAddress)
-
 			if pubAddress != auth.EthAddress {
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return

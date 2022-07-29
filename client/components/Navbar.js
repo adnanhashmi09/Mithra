@@ -3,6 +3,9 @@ import styles from '../styles/Navbar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 
+import { useStateContext } from '../context/stateContext';
+import { checkWeb3 } from '../lib/checkWeb3';
+
 function Navbar(props) {
   const und = props.underline;
 
@@ -10,6 +13,15 @@ function Navbar(props) {
 
   const toggleClass = () => {
     setActive(!isActive);
+  };
+
+  const { brandAddress, setBrandAddress } = useStateContext();
+
+  const handleConnect = async (e) => {
+    e.preventDefault();
+    const response = await checkWeb3();
+    setBrandAddress(response.address);
+    // console.log(brandAddress);
   };
 
   return (
@@ -77,11 +89,25 @@ function Navbar(props) {
                     )}
                   </li>
                 </Link>
+                {brandAddress != '' && (
+                  <Link href="/brand/admin/dashboard">
+                    <li>
+                      Dashboard
+                      {und === 'dashboard' ? (
+                        <div className={styles.underline}></div>
+                      ) : (
+                        ''
+                      )}
+                    </li>
+                  </Link>
+                )}
               </ul>
             </div>
-            <div className={styles.search}>
-              <button>Connect Wallet</button>
-            </div>
+            {brandAddress == '' && (
+              <div className={styles.search}>
+                <button onClick={handleConnect}>Connect Wallet</button>
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -131,11 +157,26 @@ function Navbar(props) {
                   )}
                 </li>
               </Link>
-              <li>
-                <div className={styles.search}>
-                  <button>Connect Wallet</button>
-                </div>
-              </li>
+
+              {brandAddress != '' && (
+                <Link href="/brand/admin/dashboard">
+                  <li>
+                    Dashboard
+                    {und === 'dashboard' ? (
+                      <div className={styles.underline}></div>
+                    ) : (
+                      ''
+                    )}
+                  </li>
+                </Link>
+              )}
+              {brandAddress == '' && (
+                <li>
+                  <div className={styles.search}>
+                    <button>Connect Wallet</button>
+                  </div>
+                </li>
+              )}
             </ul>
           </div>
         </div>

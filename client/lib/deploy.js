@@ -1,4 +1,6 @@
 import { ethers, ContractFactory } from 'ethers';
+import { useEffect, useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 
 import Warranty from '../../blockchain/artifacts/contracts/Warranty.sol/Warranty.json';
 
