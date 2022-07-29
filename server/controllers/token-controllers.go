@@ -94,39 +94,78 @@ func GetToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(token)
 }
 
-func ApproveToken(w http.ResponseWriter, r *http.Request) {
-	token := &db.Token{}
+func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
+	address := r.Context().Value(Key("addresss"))
+
+	token := db.Token{}
 	json.NewDecoder(r.Body).Decode(&token)
 
 	presentToken := &db.Token{}
 	err := mh.GetSingleToken(presentToken, bson.M{"productId": token.ProductId})
 	if err != nil {
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	if presentToken.Minter != address {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
 
-	address := fmt.Sprint(r.Context().Value(Key("address")))
-	if token.MetaHash == "" {
-		metaRsp, err := MintToken(token)
-		if err != nil {
+	approval := token.Approval
+	token.Transactions = []db.Transaction{}
+	token.Transactions = append(token.Transactions, presentToken.Transactions...)
+	token.Transactions = append(token.Transactions, approval)
+	token.ApprovalStatus = true
+
+	_, err = mh.ReplaceToken(&token, bson.M{"productId": token.ProductId})
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	mssg := fmt.Sprintf("Your token for product ID: %s, and IPFS Hash: %s has been approved. You can now avail warranty benefits", token.ProductId, token.MetaHash)
+	err = sendMail(token.Email, mssg)
+	if err != nil {
+		log.Println("unable to send email")
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(
+		TokenResponse{
+			Status:   "success",
+			Failure:  false,
+			Response: token,
+		},
+	)
+
+}
+
+func ApproveToken(w http.ResponseWriter, r *http.Request) {
+	address := r.Context().Value(Key("address")).(string)
+
+	token := db.Token{}
+	json.NewDecoder(r.Body).Decode(&token)
+
+	presentToken := &db.Token{}
+	err := mh.GetSingleToken(presentToken, bson.M{"productId": token.ProductId})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			metaRsp, err := MintToken(&token)
+			if err != nil {
+				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+				return
+			}
+			token.MetaHash = metaRsp.IpfsHash
+			token.MintedOn = metaRsp.Timestamp
+			token.Minter = address
+		} else {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
-		token.MetaHash = metaRsp.IpfsHash
-		token.MintedOn = metaRsp.Timestamp
-		token.Minter = address
 	}
 
-	if token.Minter != address {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	token.Transactions = append(token.Transactions, presentToken.Transactions...)
-	token.Transactions = append(token.Transactions, token.Approval)
-	token.ApprovalStatus = true
-
-	_, err = mh.ReplaceToken(token, bson.M{"metaHash": token.MetaHash})
+	_, err = mh.ReplaceToken(&token, bson.M{"productId": token.ProductId})
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
@@ -135,8 +174,9 @@ func ApproveToken(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(
 		TokenResponse{
-			Status:  "success",
-			Failure: false,
+			Status:   "success",
+			Failure:  false,
+			Response: token,
 		},
 	)
 }
