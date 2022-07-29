@@ -13,6 +13,8 @@ import getStripe from '../../lib/getStripe';
 import { useStateContext } from '../../context/StateContext';
 import useCheckWeb3Support from '../../hooks/checkWeb3Support';
 
+import { signMessage } from '../../lib/signMessage';
+
 const styles = {
   position: 'absolute',
   top: '30%',
@@ -43,12 +45,89 @@ const ProductDetails = ({ product, products }) => {
         console.error('Oh no, the update failed: ', err.message);
       });
   };
+
+  function randomStringGenerator(strLength, charSet) {
+    var result = [];
+
+    strLength = strLength || 5;
+    charSet =
+      charSet ||
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    while (strLength--) {
+      // (note, fixed typo)
+      result.push(charSet.charAt(Math.floor(Math.random() * charSet.length)));
+    }
+
+    return result.join('');
+  }
+
+  const initApproval = async (emailAddress, product) => {
+    const img = product.image[0].asset._ref;
+    const newImage = img
+      .replace('image-', 'https://cdn.sanity.io/images/50pnuw2c/production/')
+      .replace('-webp', '.webp');
+
+    const today = new Date();
+    const date = String(
+      `${today.getDate()}.${String(today.getMonth() + 1).padStart(
+        2,
+        '0'
+      )}.${today.getFullYear()}`
+    );
+
+    const randomString = randomStringGenerator(20);
+
+    const body = {
+      name: product.name,
+      owner: product.owner,
+      productId: product._id,
+      brand: product.brand,
+      tokenUri: newImage,
+      period: product.warrantyPeriod,
+      description: product.details,
+      email: emailAddress,
+      approval: {
+        event: 'transfer',
+        date: date,
+        from: product.owner,
+        to: address,
+        txnId: randomString,
+      },
+    };
+
+    const resp = await fetch('http://localhost:5050/token/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    console.log(resp);
+  };
+
   const handleBuyNow = async () => {
     if (address === '') {
       toast.error('please connect to metamask');
       return;
     }
+
+    console.log(product);
+
+    const prm = signMessage(address);
+
+    await toast.promise(prm, {
+      loading: 'Loading...',
+      success: (data) => {
+        return 'Transaction signed successfully';
+      },
+      error: 'Transaction failed',
+    });
+
     productSold();
+    initApproval('adnan@gmail.com', product);
+
+    return;
+
     const stripe = await getStripe();
     const gas = 20;
     const response = await fetch('/api/stripe', {

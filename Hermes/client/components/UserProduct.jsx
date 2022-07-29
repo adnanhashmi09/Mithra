@@ -5,6 +5,8 @@ import { client, urlFor } from '../lib/client';
 import { useStateContext } from '../context/StateContext';
 import toast from 'react-hot-toast';
 
+import { signMessage } from '../lib/signMessage';
+
 const UserProduct = ({
   product: { image, name, approvalStatus, price, _id },
   setReload,
@@ -14,11 +16,20 @@ const UserProduct = ({
   const productSold = () => {
     return client
       .patch(_id)
-      .set({ sold: false, approvalStatus: false, owner: ' ' })
+      .set({ sold: false, approvalStatus: false })
       .commit();
   };
 
   const handleResale = async () => {
+    const prm = signMessage(address);
+
+    await toast.promise(prm, {
+      loading: 'Loading...',
+      success: (data) => {
+        return 'Transaction signed successfully';
+      },
+      error: 'Transaction failed',
+    });
     const myPromise = productSold();
     await toast.promise(myPromise, {
       loading: 'Listing in the market...',
@@ -58,7 +69,17 @@ const UserProduct = ({
             63FaC9201494f0bd17B9892B9fae4d52fe3BD377
           </a>
           <div className="buttons">
-            <button type="button" className="buy-now" onClick={handleResale}>
+            <button
+              disabled={!approvalStatus}
+              type="button"
+              className="buy-now"
+              onClick={handleResale}
+              style={
+                approvalStatus === true
+                  ? {}
+                  : { opacity: 0.3, cursor: 'not-allowed' }
+              }
+            >
               Re-sell
             </button>
           </div>

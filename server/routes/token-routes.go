@@ -8,6 +8,7 @@ import (
 
 func TokenRoutes(r chi.Router) {
 	r.Post("/single", controllers.GetToken)
+	r.Post("/register", controllers.RegisterToken)
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.VerifyAddress)
 		r.Post("/all", controllers.GetTokensByBrand)

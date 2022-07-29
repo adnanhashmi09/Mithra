@@ -49,7 +49,7 @@ export default {
     {
       name: 'warrantyPeriod',
       title: 'Warranty Period',
-      type: 'string',
+      type: 'number',
     },
     {
       name: 'brand',

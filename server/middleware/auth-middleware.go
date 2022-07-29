@@ -29,8 +29,9 @@ type Auth struct {
 func VerifyAddress(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
+			body, _ := r.GetBody()
 			auth := Auth{}
-			json.NewDecoder(r.Body).Decode(&auth)
+			json.NewDecoder(body).Decode(&auth)
 
 			data, err := controllers.GenBrandNonce(auth.EthAddress)
 			if err != nil {

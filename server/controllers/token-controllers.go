@@ -147,25 +147,15 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 
 	presentToken := &db.Token{}
 	err := mh.GetSingleToken(presentToken, bson.M{"productId": token.ProductId})
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			metaRsp, err := MintToken(token)
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-				return
-			}
-			token.MetaHash = metaRsp.IpfsHash
-			token.MintedOn = metaRsp.Timestamp
-		} else {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-			return
-		}
+	if err != nil && err != mongo.ErrNoDocuments {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
 	}
 
 	token.Transactions = append(token.Transactions, presentToken.Transactions...)
 	token.ApprovalStatus = false
 
-	_, err = mh.ReplaceToken(token, bson.M{"metaHash": token.MetaHash})
+	_, err = mh.ReplaceToken(token, bson.M{"productId": token.ProductId})
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
