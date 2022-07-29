@@ -4,8 +4,12 @@ import (
 	"crypto/rand"
 	"math/big"
 	"mime/multipart"
+	"net"
 	"net/http"
+	"net/smtp"
 	"strconv"
+
+	"warranty.com/utils"
 )
 
 type FormMultipart struct {
@@ -47,4 +51,18 @@ func genNonce() (string, error) {
 	nonce := int(randNonce.Int64())
 
 	return strconv.Itoa(nonce), nil
+}
+
+func sendMail(email string, message string) error {
+	toList := []string{email}
+
+	host := utils.Dotenv("SMTP_HOST")
+	port := utils.Dotenv("SMTP_PORT")
+	from := utils.Dotenv("SMTP_ID")
+	pass := utils.Dotenv("SMTP_PASS")
+
+	body := []byte(message)
+	auth := smtp.PlainAuth("", from, pass, host)
+	err := smtp.SendMail(net.JoinHostPort(host, port), auth, from, toList, body)
+	return err
 }
