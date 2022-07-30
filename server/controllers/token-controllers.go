@@ -28,9 +28,7 @@ type TokenResponse struct {
 }
 
 func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
-	// token := &db.Token{}
 	brand := &db.Brand{}
-	// json.NewDecoder(r.Body).Decode(brand)
 
 	address := r.Context().Value(Key("address")).(string)
 
@@ -71,7 +69,6 @@ func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetTokensByOwner(w http.ResponseWriter, r *http.Request) {
-	// token := &db.Token{}
 	token := &db.Token{}
 	json.NewDecoder(r.Body).Decode(token)
 	filter := bson.M{"$or": []bson.M{{"owner": token.Owner}, {"approval.to": token.Owner}}}
@@ -147,6 +144,9 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 	approval := presentToken.Approval
 	approval.TxnHash = token.Approval.TxnHash
 
+	if token.TokenId != "" {
+		presentToken.TokenId = token.TokenId
+	}
 	presentToken.Owner = presentToken.Approval.To
 	presentToken.Transactions = append(presentToken.Transactions, approval)
 	presentToken.ApprovalStatus = true
@@ -158,7 +158,11 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mssg := fmt.Sprintf("Your token for product ID: %s, and IPFS Hash: %s has been approved. You can now avail warranty benefits", presentToken.ProductId, presentToken.MetaHash)
+	mssg := fmt.Sprintf(
+		`Your token for product ID: %s, and IPFS Hash: %s has been approved. 
+		You can now avail warranty benefits.\n, This warranty will expire in %d days`,
+		presentToken.ProductId, presentToken.MetaHash, presentToken.Period,
+	)
 	err = sendMail(approval.Email, mssg)
 	if err != nil {
 		log.Println("unable to send email")
@@ -182,10 +186,8 @@ func ApproveToken(w http.ResponseWriter, r *http.Request) {
 	token := db.Token{}
 
 	json.NewDecoder(r.Body).Decode(&token)
-	fmt.Println("============= ", token.ProductId)
 	err := mh.GetSingleToken(&token, bson.M{"productId": token.ProductId})
 	if err != nil {
-		fmt.Println("Error ====> ", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
@@ -235,6 +237,9 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if token.Owner == "" {
+		token.Owner = token.BrandAddress
+	}
 	token.Transactions = append(token.Transactions, presentToken.Transactions...)
 	token.ApprovalStatus = false
 
