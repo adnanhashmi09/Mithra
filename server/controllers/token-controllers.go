@@ -144,9 +144,11 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	presentToken.Approval.TxnHash = token.Approval.TxnHash
+	approval := presentToken.Approval
+	approval.TxnHash = token.Approval.TxnHash
+
 	presentToken.Owner = presentToken.Approval.To
-	presentToken.Transactions = append(presentToken.Transactions, presentToken.Approval)
+	presentToken.Transactions = append(presentToken.Transactions, approval)
 	presentToken.ApprovalStatus = true
 	presentToken.Approval = db.Transaction{}
 
@@ -157,7 +159,7 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mssg := fmt.Sprintf("Your token for product ID: %s, and IPFS Hash: %s has been approved. You can now avail warranty benefits", token.ProductId, token.MetaHash)
-	err = sendMail(token.Email, mssg)
+	err = sendMail(approval.Email, mssg)
 	if err != nil {
 		log.Println("unable to send email")
 	}
