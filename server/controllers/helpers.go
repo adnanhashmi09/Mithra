@@ -57,7 +57,7 @@ func genNonce() (string, error) {
 func sendMail(email string, mssg string) error {
 	from := mail.NewEmail("Team Comders", "team.comders@gmail.com")
 	subject := "Mithra: Warranty token update"
-	to := mail.NewEmail("Recipient", "mehul707gulati@gmail.com")
+	to := mail.NewEmail("Recipient", email)
 	plainTextContent := mssg
 	htmlContent := fmt.Sprintf("<strong>%s</strong>", mssg)
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)

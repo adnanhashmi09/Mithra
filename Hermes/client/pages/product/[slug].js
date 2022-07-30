@@ -38,7 +38,7 @@ const ProductDetails = ({ product, products }) => {
   const productSold = async () => {
     return client
       .patch(product._id)
-      .set({ sold: true, approvalStatus: false, owner: address })
+      .set({ sold: true, owner: address })
       .commit();
   };
 
@@ -85,6 +85,7 @@ const ProductDetails = ({ product, products }) => {
       period: product.warrantyPeriod,
       description: product.details,
       email: emailAddress,
+      saleDate: date,
       approval: {
         event: 'transfer',
         date: date,
@@ -132,7 +133,7 @@ const ProductDetails = ({ product, products }) => {
       success: 'Transaction initiated successfully',
       error: ' Transaction failed',
     });
-    initApproval('adnan@gmail.com', product);
+    initApproval(email, product);
     return;
     const stripe = await getStripe();
     const gas = 20;

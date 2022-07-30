@@ -137,6 +137,7 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if presentToken.Minter != address {
+		fmt.Println("Not the minter")
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -147,20 +148,22 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 	if token.TokenId != 0 {
 		presentToken.TokenId = token.TokenId
 	}
+
 	presentToken.Owner = presentToken.Approval.To
 	presentToken.Transactions = append(presentToken.Transactions, approval)
 	presentToken.ApprovalStatus = true
 	presentToken.Approval = db.Transaction{}
 
-	_, err = mh.ReplaceToken(&token, bson.M{"productId": token.ProductId})
+	_, err = mh.ReplaceToken(presentToken, bson.M{"productId": token.ProductId})
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		fmt.Println(err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
 	mssg := fmt.Sprintf(
 		`Your token for product ID: %s, and IPFS Hash: %s has been approved. 
-		You can now avail warranty benefits.\n, This warranty will expire in %d days`,
+		You can now avail warranty benefits. This warranty will expire in %d days`,
 		presentToken.ProductId, presentToken.MetaHash, presentToken.Period,
 	)
 	err = sendMail(approval.Email, mssg)
@@ -193,7 +196,7 @@ func ApproveToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if token.MetaHash == "" {
-		metaRsp, err := MintToken(&token)
+		metaRsp, err := MintToken(&token, address)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
@@ -204,7 +207,7 @@ func ApproveToken(w http.ResponseWriter, r *http.Request) {
 
 		filter := bson.M{"productId": token.ProductId}
 		update := bson.M{"$set": bson.M{
-			"metHash":  metaRsp.IpfsHash,
+			"metaHash": metaRsp.IpfsHash,
 			"mintedOn": metaRsp.Timestamp,
 			"minter":   address,
 			"tokenId":  token.TokenId}}
@@ -282,7 +285,7 @@ func GetTokenNonce(w http.ResponseWriter, r *http.Request) {
 	)
 }
 
-func MintToken(tk *db.Token) (*utils.IpfsRsp, error) {
+func MintToken(tk *db.Token, address string) (*utils.IpfsRsp, error) {
 	tokenMetadata := &utils.IpfsMetadata{
 		Name:           tk.Name,
 		ProductId:      tk.ProductId,
@@ -290,6 +293,7 @@ func MintToken(tk *db.Token) (*utils.IpfsRsp, error) {
 		Brand:          tk.Brand,
 		TokenURI:       tk.TokenURI,
 		WarrantyPeriod: tk.Period,
+		Minter:         address,
 	}
 	metaRsp, err := utils.PinJSONToIPFS(tokenMetadata, pinata_key, pinata_secret)
 

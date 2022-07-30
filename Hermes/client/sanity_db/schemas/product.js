@@ -57,11 +57,6 @@ export default {
       type: 'string',
     },
     {
-      name: 'approvalStatus',
-      title: 'Approval Status',
-      type: 'boolean',
-    },
-    {
       name: 'contractAddress',
       title: 'Contract Address',
       type: 'string',

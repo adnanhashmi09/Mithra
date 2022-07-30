@@ -77,20 +77,28 @@ function Admin() {
               <span>{brand}</span> Admin Dashboard
             </h1>
             <div className={styles.tabs}>
-              <div className={styles.tab}>Approved </div>
-              <div className={styles.tab}>Pending </div>
-            </div>
-            <div className={styles['select-dropdown']}>
-              <select
-                onChange={(e) => {
-                  handleSelect(e);
+              <div
+                onClick={(e) => {
+                  setTab('Approved');
                 }}
-                value={tab}
+                className={`${styles.tab} ${
+                  tab == 'Approved' ? styles.active : ''
+                }`}
               >
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-              </select>
+                Approved
+              </div>
+              <div
+                onClick={(e) => {
+                  setTab('Pending');
+                }}
+                className={`${styles.tab} ${
+                  tab == 'Pending' ? styles.active : ''
+                }`}
+              >
+                Pending
+              </div>
             </div>
+
             {valid && (
               <div className={styles.cardContainer}>
                 {Array.from(products[tab]).map((e, index) => (

@@ -16,13 +16,6 @@ import (
 	"warranty.com/controllers"
 )
 
-// var (
-// 	NonceGenerator = map[string]func(string) (string, error){
-// 		"brand": controllers.GenBrandNonce,
-// 		"token": controllers.GenTokenNonce,
-// 	}
-// )
-
 type Auth struct {
 	Signature  string `json:"signature,omitempty"`
 	EthAddress string `json:"ethAddress"`
@@ -44,26 +37,17 @@ func VerifyAddress(next http.Handler) http.Handler {
 			r.Body.Close()
 			r.Body = ioutil.NopCloser(buf)
 
-			// -------------------------------
-
-			// body, _ := ioutil.ReadAll(r.Body)
-			// IOBody := ioutil.NopCloser(bytes.NewBuffer(body))
-			// IOBodyOne := ioutil.NopCloser(bytes.NewBuffer(body))
-			// auth := &Auth{}
-			// err := json.NewDecoder(IOBody).Decode(auth)
-
-			// r.Body = IOBodyOne
-
-			// if err != nil {
-			// 	log.Println("Error unmarshalling auth data: ", err)
-			// }
-
 			log.Println(auth.EthAddress)
 			data, err := controllers.GenBrandNonce(auth.EthAddress)
+
+			// time.Sleep(1 * time.Second)
+
 			if err != nil {
 				http.Error(w, fmt.Sprintln(err), http.StatusBadRequest)
 				return
 			}
+
+			log.Println(data)
 
 			sigByte := hexutil.MustDecode(auth.Signature)
 			if sigByte[64] != 27 && sigByte[64] != 28 {
@@ -85,6 +69,9 @@ func VerifyAddress(next http.Handler) http.Handler {
 			log.Println(derivedAddress)
 			pubAddress := strings.ToLower(derivedAddress)
 			if pubAddress != auth.EthAddress {
+				log.Println("pubAddress : ", pubAddress)
+				log.Println("ethAddress  : ", auth.EthAddress)
+				log.Println("Address does not match")
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}

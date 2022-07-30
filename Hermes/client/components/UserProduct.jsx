@@ -21,10 +21,7 @@ const UserProduct = ({
   const [token, setToken] = useState({});
 
   const productSold = async () => {
-    return client
-      .patch(_id)
-      .set({ sold: false, approvalStatus: false })
-      .commit();
+    return client.patch(_id).set({ sold: false }).commit();
   };
 
   const toggleSale = async () => {
