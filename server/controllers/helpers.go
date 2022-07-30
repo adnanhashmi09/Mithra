@@ -2,14 +2,15 @@ package controllers
 
 import (
 	"crypto/rand"
+	"fmt"
+	"log"
 	"math/big"
 	"mime/multipart"
-	"net"
 	"net/http"
-	"net/smtp"
 	"strconv"
 
-	"warranty.com/utils"
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 type FormMultipart struct {
@@ -53,16 +54,15 @@ func genNonce() (string, error) {
 	return strconv.Itoa(nonce), nil
 }
 
-func sendMail(email string, message string) error {
-	toList := []string{email}
-
-	host := utils.Dotenv("SMTP_HOST")
-	port := utils.Dotenv("SMTP_PORT")
-	from := utils.Dotenv("SMTP_ID")
-	pass := utils.Dotenv("SMTP_PASS")
-
-	body := []byte(message)
-	auth := smtp.PlainAuth("", from, pass, host)
-	err := smtp.SendMail(net.JoinHostPort(host, port), auth, from, toList, body)
+func sendMail(email string, mssg string) error {
+	from := mail.NewEmail("Team Comders", "team.comders@gmail.com")
+	subject := "Mithra: Warranty token update"
+	to := mail.NewEmail("Recipient", "mehul707gulati@gmail.com")
+	plainTextContent := mssg
+	htmlContent := fmt.Sprintf("<strong>%s</strong>", mssg)
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient("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")
+	response, err := client.Send(message)
+	log.Println(response.StatusCode)
 	return err
 }

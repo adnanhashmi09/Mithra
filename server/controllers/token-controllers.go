@@ -158,7 +158,7 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mssg := fmt.Sprintf("Your token for product ID: %s, and IPFS Hash: %s has been approved. You can now avail warranty benefits", token.ProductId, token.MetaHash)
+	mssg := fmt.Sprintf("Your token for product ID: %s, and IPFS Hash: %s has been approved. You can now avail warranty benefits", presentToken.ProductId, presentToken.MetaHash)
 	err = sendMail(approval.Email, mssg)
 	if err != nil {
 		log.Println("unable to send email")
