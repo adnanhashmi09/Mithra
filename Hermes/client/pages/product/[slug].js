@@ -29,23 +29,17 @@ const styles = {
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price, sold } = product;
   const [index, setIndex] = useState(0);
-  const [ email, setEmail ] = useState('');
+  const [email, setEmail] = useState('');
   const { qty, address } = useStateContext();
-  
+
   console.log(sold);
 
   useCheckWeb3Support();
-  const productSold = () => {
-    client
+  const productSold = async () => {
+    return client
       .patch(product._id)
       .set({ sold: true, approvalStatus: false, owner: address })
-      .commit()
-      .then((updatedBike) => {
-        console.log(updatedBike);
-      })
-      .catch((err) => {
-        console.error('Oh no, the update failed: ', err.message);
-      });
+      .commit();
   };
 
   function randomStringGenerator(strLength, charSet) {
@@ -131,11 +125,15 @@ const ProductDetails = ({ product, products }) => {
       error: 'Transaction failed',
     });
 
-    productSold();
+    const sanityPromise = productSold();
+
+    await toast.promise(sanityPromise, {
+      loading: 'Initiating Transaction...',
+      success: 'Transaction initiated successfully',
+      error: ' Transaction failed',
+    });
     initApproval('adnan@gmail.com', product);
-
     return;
-
     const stripe = await getStripe();
     const gas = 20;
     const response = await fetch('/api/stripe', {
@@ -200,15 +198,15 @@ const ProductDetails = ({ product, products }) => {
             className="buttons"
             style={sold ? { opacity: 0.3, pointerEvents: 'none' } : {}}
           >
-            <input 
-              type="text" 
+            <input
+              type="text"
               className="input-email"
-              placeholder="Email: you will be notified here when the warranty starts" 
+              placeholder="Email: you will be notified here when the warranty starts"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-              }} 
-            />    
+              }}
+            />
             <button type="button" className="buy-now" onClick={handleBuyNow}>
               Buy Now
             </button>

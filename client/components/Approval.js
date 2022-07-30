@@ -19,6 +19,7 @@ function Approval({
   saleDate,
   contractAddress,
   tab,
+  tokenId,
 }) {
   const handleApproval = async (e) => {
     e.preventDefault();
@@ -56,28 +57,28 @@ function Approval({
       days
     ); // get a txnHash here
 
-    approval.To = "" // replace txnHash here
-    const resp = await signMessage(brandAddress);
+    // approval.To = ''; // replace txnHash here
+    // const resp = await signMessage(brandAddress);
 
-    console.log(resp.error);
-    if (response.error) {
-      toast.error(
-        'Signature not valid. Please connect with your wallet and reload.'
-      );
-    }
+    // console.log(resp.error);
+    // if (response.error) {
+    //   toast.error(
+    //     'Signature not valid. Please connect with your wallet and reload.'
+    //   );
+    // }
 
-    const txnRsp = await fetch('http://localhost:5050/token/approve/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        Approval: approval,
-        productId: productId,
-        ethAddress: response.address,
-        signature: response.signature,
-      }),
-    });
-    const dat = await res.json();
-    console.log(dat);
+    // const txnRsp = await fetch('http://localhost:5050/token/approve/add', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     Approval: approval,
+    //     productId: productId,
+    //     ethAddress: response.address,
+    //     signature: response.signature,
+    //   }),
+    // });
+    // const dat = await res.json();
+    // console.log(dat);
   };
 
   const transferTokenToNewUser = async (to) => {
@@ -90,8 +91,17 @@ function Approval({
         signer
       );
 
-      const txn = await contract.resale(1, to);
+      const txn = await contract.resale(tokenId, to);
       const prm = txn.wait();
+
+      contract.on('WarrantyCardMinted', (from, to, value, event) => {
+        console.log({
+          from: from,
+          to: to,
+          value: value.toString(),
+          data: event,
+        });
+      });
 
       let txnData;
 
@@ -99,12 +109,16 @@ function Approval({
         loading: 'Minting Token...',
         success: (data) => {
           txnData = data;
-          return 'Token minted successfully';
+          return 'Token transferred successfully';
         },
         error: (err) => `Error: ${err}`,
       });
 
       console.log(txnData);
+      const token_id = events[0].args.tokenId;
+      const decoded_token_id = token_id.toNumber();
+      console.log(decoded_token_id);
+      console.log(txnData.transactionHash);
     } catch (error) {
       if (error.message.includes('Warranty: token is not out for sale')) {
         toast.error('Token is not out for sale');
@@ -130,6 +144,20 @@ function Approval({
 
       let txnData;
 
+      const filter = {
+        address: contractAddress,
+        topics: [
+          ethers.utils.id(
+            'WarrantyCardMinted(address, uint256, string, uint256)'
+          ),
+        ],
+      };
+
+      provider.on(filter, (log, event) => {
+        console.log(log);
+        console.log(event);
+      });
+
       await toast.promise(prm, {
         loading: 'Minting Token...',
         success: (data) => {
@@ -140,12 +168,19 @@ function Approval({
       });
 
       console.log(txnData);
+      console.log(txnData.transactionHash);
+      const token_id = txnData.events[0].args.tokenId;
+      const decoded_token_id = ethers.BigNumber.from(token_id).toNumber();
+      console.log(decoded_token_id);
+      return txnData;
     } catch (error) {
       if (error.message.includes('Warranty: already minted')) {
         toast.error('Warranty card already minter');
+
         transferTokenToNewUser(to);
       } else {
         toast.error('error');
+        console.log(error);
       }
     }
   };

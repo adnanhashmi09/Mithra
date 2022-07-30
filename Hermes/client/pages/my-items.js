@@ -10,14 +10,15 @@ function myItems() {
   const { address } = useStateContext();
   const [products, setProducts] = useState([]);
   const [reload, setReload] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   useCheckWeb3Support();
 
   useEffect(async () => {
     if (address !== '') {
-      const query = `*[_type == "product" && owner == "${address}"]`;
+      const query = `*[_type == "product" && owner == "${address}" && sold == true]`;
       const items = await client.fetch(query);
       setProducts(items);
+      // console.log(items);
     }
 
     const res = await fetch('http://localhost:5050/token/owner/all', {
@@ -27,8 +28,8 @@ function myItems() {
     });
 
     const ServerData = await res.json();
-    console.log(ServerData);
-    setData(ServerData.tokens.unapproved);
+    // console.log(ServerData);
+    setData(ServerData.tokens);
   }, [address, reload]);
 
   return (
@@ -45,24 +46,14 @@ function myItems() {
             My Products
           </h1>
           <div className="my-item-container">
-            {products?.map((product) => {
-              console.log('-----------------------------------------');
-              const isUnapproved = data.find((el) => {
-                console.log('el ', el.productId);
-                console.log('product ', product._id);
-                console.log(el.productId === product._id);
-                return el.productId == product._id;
-              });
-
-              console.log(isUnapproved);
-
+            {products.map((product) => {
               return (
                 <UserProduct
                   key={product._id}
                   product={product}
                   setReload={setReload}
                   reload={reload}
-                  isUnapproved={isUnapproved}
+                  mongoData={data}
                 />
               );
             })}

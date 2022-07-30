@@ -18,7 +18,7 @@ type Transaction struct {
 type Token struct {
 	Name            string        `json:"name" bson:"name"`
 	Owner           string        `json:"owner" bson:"owner"`
-	TokenId         string        `json:"tokenId" bson:"tokenId"`
+	TokenId         int           `json:"tokenId" bson:"tokenId"`
 	Nonce           string        `json:"nonce" bson:"nonce"`
 	ProductId       string        `json:"productId" bson:"productId"`
 	Brand           string        `json:"brand" bson:"brand"`

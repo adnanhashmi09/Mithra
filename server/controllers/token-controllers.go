@@ -144,7 +144,7 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 	approval := presentToken.Approval
 	approval.TxnHash = token.Approval.TxnHash
 
-	if token.TokenId != "" {
+	if token.TokenId != 0 {
 		presentToken.TokenId = token.TokenId
 	}
 	presentToken.Owner = presentToken.Approval.To
