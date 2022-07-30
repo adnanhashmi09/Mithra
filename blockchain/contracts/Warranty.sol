@@ -141,7 +141,9 @@ contract Warranty is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     ///---------------------------------------------------------------------------------------------------------------------
 
     /** 
-
+if (error.message.includes('Warranty: already minted')) {
+          toast.error('');
+        } else {
      * @dev The following function allows the owner of the Token to burn their warranty card.
        @param tokenId The token id of warranty card to be burned.
     */

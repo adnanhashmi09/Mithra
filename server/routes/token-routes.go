@@ -14,6 +14,7 @@ func TokenRoutes(r chi.Router) {
 		r.Use(middleware.VerifyAddress)
 		r.Post("/all", controllers.GetTokensByBrand)
 		r.Post("/approve", controllers.ApproveToken)
+		r.Post("/approve/add", controllers.AddApprovedToken)
 	})
 
 }

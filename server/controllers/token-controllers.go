@@ -144,11 +144,11 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	approval := token.Approval
-	token.Transactions = []db.Transaction{}
-	token.Transactions = append(token.Transactions, presentToken.Transactions...)
-	token.Transactions = append(token.Transactions, approval)
-	token.ApprovalStatus = true
+	presentToken.Approval.TxnHash = token.Approval.TxnHash
+	presentToken.Owner = presentToken.Approval.To
+	presentToken.Transactions = append(presentToken.Transactions, presentToken.Approval)
+	presentToken.ApprovalStatus = true
+	presentToken.Approval = db.Transaction{}
 
 	_, err = mh.ReplaceToken(&token, bson.M{"productId": token.ProductId})
 	if err != nil {
@@ -202,7 +202,8 @@ func ApproveToken(w http.ResponseWriter, r *http.Request) {
 		update := bson.M{"$set": bson.M{
 			"metHash":  metaRsp.IpfsHash,
 			"mintedOn": metaRsp.Timestamp,
-			"minter":   address}}
+			"minter":   address,
+			"tokenId":  token.TokenId}}
 
 		_, err = mh.UpdateSingleToken(filter, update)
 		if err != nil {

@@ -12,11 +12,44 @@ const UserProduct = (
   isUnapproved
 ) => {
   const { qty, address } = useStateContext();
-  const productSold = () => {
+  const productSold = async () => {
+
+
     return client
       .patch(_id)
       .set({ sold: false, approvalStatus: false })
       .commit();
+
+    const toggleSale = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        const contract = new ethers.Contract(
+          contractAddress,
+          Warranty.abi,
+          signer
+        );
+
+        const txn = await contract.safeMint(to, metaHash, uri, days);
+        const prm = txn.wait();
+
+        let txnData;
+
+        await toast.promise(prm, {
+          loading: 'Putting up token for sale...',
+          success: (data) => {
+            txnData = data;
+            return 'Token listed successfully';
+          },
+          error: (err) => `Error: ${err}`,
+        });
+
+        console.log(txnData);
+      } catch (error) {
+          toast.error('error');
+      }
+    }
   };
 
   const handleResale = async () => {

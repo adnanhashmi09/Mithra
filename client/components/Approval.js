@@ -54,7 +54,30 @@ function Approval({
       data.response.metaHash,
       data.response.tokenUri,
       days
-    );
+    ); // get a txnHash here
+
+    approval.To = "" // replace txnHash here
+    const resp = await signMessage(brandAddress);
+
+    console.log(resp.error);
+    if (response.error) {
+      toast.error(
+        'Signature not valid. Please connect with your wallet and reload.'
+      );
+    }
+
+    const txnRsp = await fetch('http://localhost:5050/token/approve/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        Approval: approval,
+        productId: productId,
+        ethAddress: response.address,
+        signature: response.signature,
+      }),
+    });
+    const dat = await res.json();
+    console.log(dat);
   };
 
   const transferTokenToNewUser = async (to) => {
