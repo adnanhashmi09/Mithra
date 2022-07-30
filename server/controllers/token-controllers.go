@@ -60,11 +60,43 @@ func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
 		Unapproved: unapproved,
 	}
 
+	log.Println(brand.Name)
+
 	json.NewEncoder(w).Encode(TokenResponse{
 		Status:  "success",
 		Failure: false,
 		Tokens:  result,
 		Brand:   brand.Name,
+	})
+}
+
+func GetTokensByOwner(w http.ResponseWriter, r *http.Request) {
+	// token := &db.Token{}
+	token := &db.Token{}
+	json.NewDecoder(r.Body).Decode(token)
+	filter := bson.M{"$or": []bson.M{{"owner": token.Owner}, {"approval.to": token.Owner}}}
+	tokens := mh.GetTokens(filter)
+
+	approved := []*db.Token{}
+	unapproved := []*db.Token{}
+
+	for _, token := range tokens {
+		if token.ApprovalStatus {
+			approved = append(approved, token)
+		} else {
+			unapproved = append(unapproved, token)
+		}
+	}
+
+	result := &TokenArr{
+		Approved:   approved,
+		Unapproved: unapproved,
+	}
+
+	json.NewEncoder(w).Encode(TokenResponse{
+		Status:  "success",
+		Failure: false,
+		Tokens:  result,
 	})
 }
 
@@ -95,7 +127,7 @@ func GetToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
-	address := r.Context().Value(Key("addresss"))
+	address := r.Context().Value(Key("address"))
 
 	token := db.Token{}
 	json.NewDecoder(r.Body).Decode(&token)
@@ -142,33 +174,41 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func ApproveToken(w http.ResponseWriter, r *http.Request) {
+
 	address := r.Context().Value(Key("address")).(string)
 
 	token := db.Token{}
-	json.NewDecoder(r.Body).Decode(&token)
 
-	presentToken := &db.Token{}
-	err := mh.GetSingleToken(presentToken, bson.M{"productId": token.ProductId})
+	json.NewDecoder(r.Body).Decode(&token)
+	fmt.Println("============= ", token.ProductId)
+	err := mh.GetSingleToken(&token, bson.M{"productId": token.ProductId})
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			metaRsp, err := MintToken(&token)
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-				return
-			}
-			token.MetaHash = metaRsp.IpfsHash
-			token.MintedOn = metaRsp.Timestamp
-			token.Minter = address
-		} else {
+		fmt.Println("Error ====> ", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if token.MetaHash == "" {
+		metaRsp, err := MintToken(&token)
+		if err != nil {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
-	}
+		token.MetaHash = metaRsp.IpfsHash
+		token.MintedOn = metaRsp.Timestamp
+		token.Minter = address
 
-	_, err = mh.ReplaceToken(&token, bson.M{"productId": token.ProductId})
-	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
+		filter := bson.M{"productId": token.ProductId}
+		update := bson.M{"$set": bson.M{
+			"metHash":  metaRsp.IpfsHash,
+			"mintedOn": metaRsp.Timestamp,
+			"minter":   address}}
+
+		_, err = mh.UpdateSingleToken(filter, update)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusCreated)
@@ -244,7 +284,9 @@ func MintToken(tk *db.Token) (*utils.IpfsRsp, error) {
 		WarrantyPeriod: tk.Period,
 	}
 	metaRsp, err := utils.PinJSONToIPFS(tokenMetadata, pinata_key, pinata_secret)
+
 	if err != nil {
+		fmt.Println("Error ====> ", err)
 		return nil, err
 	}
 	return metaRsp, err

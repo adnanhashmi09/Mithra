@@ -61,5 +61,15 @@ export default {
       title: 'Approval Status',
       type: 'boolean',
     },
+    {
+      name: 'contractAddress',
+      title: 'Contract Address',
+      type: 'string',
+    },
+    {
+      name: 'brandAddress',
+      title: 'Brand Address',
+      type: 'string',
+    },
   ],
 };

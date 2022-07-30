@@ -1,9 +1,12 @@
 package middleware
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -23,16 +26,39 @@ import (
 type Auth struct {
 	Signature  string `json:"signature,omitempty"`
 	EthAddress string `json:"ethAddress"`
+	ProductId  string `json:"productId"`
 	// UserType   string `json:"userType"`
 }
 
 func VerifyAddress(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			body, _ := r.GetBody()
-			auth := Auth{}
-			json.NewDecoder(body).Decode(&auth)
+			// body, _ := r.GetBody()
 
+			//--------------------------------------
+			auth := &Auth{}
+			buf := bytes.NewBuffer(make([]byte, 0))
+			reader := io.TeeReader(r.Body, buf)
+			json.NewDecoder(reader).Decode(&auth)
+
+			r.Body.Close()
+			r.Body = ioutil.NopCloser(buf)
+
+			// -------------------------------
+
+			// body, _ := ioutil.ReadAll(r.Body)
+			// IOBody := ioutil.NopCloser(bytes.NewBuffer(body))
+			// IOBodyOne := ioutil.NopCloser(bytes.NewBuffer(body))
+			// auth := &Auth{}
+			// err := json.NewDecoder(IOBody).Decode(auth)
+
+			// r.Body = IOBodyOne
+
+			// if err != nil {
+			// 	log.Println("Error unmarshalling auth data: ", err)
+			// }
+
+			log.Println(auth.EthAddress)
 			data, err := controllers.GenBrandNonce(auth.EthAddress)
 			if err != nil {
 				http.Error(w, fmt.Sprintln(err), http.StatusBadRequest)

@@ -83,6 +83,8 @@ const ProductDetails = ({ product, products }) => {
       owner: product.owner,
       productId: product._id,
       brand: product.brand,
+      contractAddress: product.contractAddress,
+      brandAddress: product.brandAddress,
       tokenUri: newImage,
       period: product.warrantyPeriod,
       description: product.details,
@@ -95,6 +97,9 @@ const ProductDetails = ({ product, products }) => {
         txnId: randomString,
       },
     };
+
+    console.log(body);
+    // return;
 
     const resp = await fetch('http://localhost:5050/token/register', {
       method: 'POST',

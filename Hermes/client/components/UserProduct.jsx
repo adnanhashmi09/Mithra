@@ -7,11 +7,10 @@ import toast from 'react-hot-toast';
 
 import { signMessage } from '../lib/signMessage';
 
-const UserProduct = ({
-  product: { image, name, approvalStatus, price, _id },
-  setReload,
-  reload,
-}) => {
+const UserProduct = (
+  { product: { image, name, approvalStatus, price, _id }, setReload, reload },
+  isUnapproved
+) => {
   const { qty, address } = useStateContext();
   const productSold = () => {
     return client
@@ -52,7 +51,7 @@ const UserProduct = ({
         <div className="text">
           <p className="product-name">{name}</p>
           <p className="product-warranty">
-            {approvalStatus === true ? (
+            {isUnapproved !== undefined ? (
               <>
                 Warranty Card Minted: <span className="approved">Approved</span>
               </>
@@ -70,12 +69,12 @@ const UserProduct = ({
           </a>
           <div className="buttons">
             <button
-              disabled={!approvalStatus}
+              disabled={isUnapproved == undefined}
               type="button"
               className="buy-now"
               onClick={handleResale}
               style={
-                approvalStatus === true
+                isUnapproved != undefined
                   ? {}
                   : { opacity: 0.3, cursor: 'not-allowed' }
               }

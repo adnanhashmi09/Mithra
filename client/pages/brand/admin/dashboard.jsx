@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Navbar from '../../../components/Navbar';
 import styles from '../../../styles/Dashboard.module.css';
 import Image from 'next/image';
@@ -15,15 +15,19 @@ function Admin() {
   const [tab, setTab] = useState('Pending');
   const [valid, setValid] = useState(false);
   const [products, setProducts] = useState({ Approved: [], Pending: [] });
-
+  const [brand, setBrand] = useState('');
   const handleSelect = (e) => {
     setTab(e.target.value);
   };
   const { brandAddress, setBrandAddress } = useStateContext();
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // console.log('I ran');
+
+    // return;
     (async () => {
       if (brandAddress !== '') {
         const response = await signMessage(brandAddress);
+
         console.log(response.error);
         if (response.error) {
           toast.error(
@@ -40,9 +44,12 @@ function Admin() {
           }),
         });
 
-        const { tokens } = await res.json();
+        const data = await res.json();
+        const { tokens, brand: brandName } = data;
+        setBrand(brandName);
         setValid(true);
         setProducts({ Approved: tokens.approved, Pending: tokens.unapproved });
+        console.log(data);
       }
     })();
   }, [brandAddress]);
@@ -66,7 +73,13 @@ function Admin() {
 
         {brandAddress !== '' && (
           <div className={styles.main}>
-            <h1>Admin Dashboard</h1>
+            <h1>
+              <span>{brand}</span> Admin Dashboard
+            </h1>
+            <div className={styles.tabs}>
+              <div className={styles.tab}>Approved </div>
+              <div className={styles.tab}>Pending </div>
+            </div>
             <div className={styles['select-dropdown']}>
               <select
                 onChange={(e) => {
@@ -79,11 +92,16 @@ function Admin() {
               </select>
             </div>
             {valid && (
-              <>
+              <div className={styles.cardContainer}>
                 {Array.from(products[tab]).map((e, index) => (
-                  <Approval {...e} tab={tab} key={`approvals ${index}`} />
+                  <Approval
+                    {...e}
+                    tab={tab}
+                    brandAddress={brandAddress}
+                    key={`approvals ${index}`}
+                  />
                 ))}
-              </>
+              </div>
             )}
           </div>
         )}
