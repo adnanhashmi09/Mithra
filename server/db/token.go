@@ -9,6 +9,7 @@ type Transaction struct {
 	Date    string `json:"date" bson:"date"`
 	From    string `json:"from" bson:"from"`
 	To      string `json:"to" bson:"to"`
+	Email   string `json:"email" bson:"email"`
 	Price   string `json:"price,omitempty" bson:"price,omitempty"`
 	TxnId   string `json:"txnId" bson:"txnId"`
 	TxnHash string `json:"txnHash" bson:"txnHash"`
@@ -17,6 +18,7 @@ type Transaction struct {
 type Token struct {
 	Name            string        `json:"name" bson:"name"`
 	Owner           string        `json:"owner" bson:"owner"`
+	TokenId         string        `json:"tokenId" bson:"tokenId"`
 	Nonce           string        `json:"nonce" bson:"nonce"`
 	ProductId       string        `json:"productId" bson:"productId"`
 	Brand           string        `json:"brand" bson:"brand"`

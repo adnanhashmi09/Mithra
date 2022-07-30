@@ -29,7 +29,9 @@ const styles = {
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price, sold } = product;
   const [index, setIndex] = useState(0);
+  const [ email, setEmail ] = useState('');
   const { qty, address } = useStateContext();
+  
   console.log(sold);
 
   useCheckWeb3Support();
@@ -94,6 +96,7 @@ const ProductDetails = ({ product, products }) => {
         date: date,
         from: product.owner,
         to: address,
+        email: email,
         txnId: randomString,
       },
     };
@@ -197,6 +200,15 @@ const ProductDetails = ({ product, products }) => {
             className="buttons"
             style={sold ? { opacity: 0.3, pointerEvents: 'none' } : {}}
           >
+            <input 
+              type="text" 
+              className="input-email"
+              placeholder="Email: you will be notified here when the warranty starts" 
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }} 
+            />    
             <button type="button" className="buy-now" onClick={handleBuyNow}>
               Buy Now
             </button>
