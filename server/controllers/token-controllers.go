@@ -281,7 +281,6 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
-
 	}
 
 	w.WriteHeader(http.StatusCreated)
@@ -353,13 +352,28 @@ func GetTokenNonce(w http.ResponseWriter, r *http.Request) {
 
 func MintToken(tk *db.Token, address string) (*utils.IpfsRsp, error) {
 	tokenMetadata := &utils.IpfsMetadata{
-		Name:           tk.Name,
-		ProductId:      tk.ProductId,
-		Description:    tk.Description,
-		Brand:          tk.Brand,
-		TokenURI:       tk.TokenURI,
-		WarrantyPeriod: tk.Period,
-		Minter:         address,
+		Name:        tk.Name,
+		ExternalUrl: "https://mithra.com",
+		Description: tk.Description,
+		Image:       tk.TokenURI,
+		Attributes: []*utils.Attribute{
+			{
+				TraitType: "brand",
+				Value:     tk.Brand,
+			},
+			{
+				TraitType: "minter",
+				Value:     address,
+			},
+			{
+				TraitType: "Warranty Period",
+				Value:     tk.Period.String(),
+			},
+			{
+				TraitType: "product_id",
+				Value:     tk.ProductId,
+			},
+		},
 	}
 	metaRsp, err := utils.PinJSONToIPFS(tokenMetadata, pinata_key, pinata_secret)
 
