@@ -55,15 +55,16 @@ function Approval({
     // const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     try {
-      // const transaction = await mintToken(
-      //   data.response.approval.to,
-      //   data.response.metaHash,
-      //   data.response.tokenUri,
-      //   data.response.period
-      // ); // get a txnHash here
+      const transaction = await mintToken(
+        data.response.approval.to,
+        data.response.metaHash,
+        data.response.tokenUri,
+        data.response.period
+      ); // get a txnHash here
+      // transaction = { txnHash: 'ahsdhasd' };
 
       const approval = data.response.approval;
-      approval.txnHash = transaction.txnHash || '';
+      approval.txnHash = transaction.txnHash;
       response = await signMessage(brandAddress);
 
       console.log(response.error);
@@ -83,9 +84,7 @@ function Approval({
           productId: productId,
           ethAddress: response.address,
           signature: response.signature,
-          tokenId: transaction.decoded_token_id
-            ? transaction.decoded_token_id
-            : 0,
+          tokenId: transaction.decoded_token_id,
         }),
       });
       const dat = await txnRsp.json();
@@ -130,16 +129,17 @@ function Approval({
         error: (err) => `Error: ${err}`,
       });
 
+      // const token_id = events[0].args.tokenId;
+      // const decoded_token_id = token_id.toNumber();
+      // console.log(decoded_token_id);
+      // console.log(txnData.transactionHash);
+
       console.log(txnData);
-      const token_id = events[0].args.tokenId;
-      const decoded_token_id = token_id.toNumber();
-      console.log(decoded_token_id);
-      console.log(txnData.transactionHash);
 
       return new Promise((resolve, reject) => {
         resolve({
           txnHash: txnData.transactionHash,
-          decoded_token_id: decoded_token_id,
+          decoded_token_id: 0,
         });
       });
     } catch (error) {

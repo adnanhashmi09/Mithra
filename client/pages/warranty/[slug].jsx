@@ -30,6 +30,7 @@ const Slug = () => {
   const [transactions, setTransactions] = useState([]);
   const [isValid, setIsValid] = useState(false);
   const [claimed, setClaimed] = useState(false);
+  const [warrantyLeft, setWarrantyLeft] = useState(0);
 
   const { brandAddress } = useStateContext();
 
@@ -43,6 +44,7 @@ const Slug = () => {
       }
       const response = await signOwnerMessage(slug, brandAddress);
       const { signature, address: signedAddress } = response;
+      console.log(response);
 
       const res = await fetch('http://localhost:5050/token/claim', {
         method: 'POST',
@@ -86,6 +88,14 @@ const Slug = () => {
         // console.log(product.transactions);
         setTransactions(data.transactions);
         setIsValid(true);
+
+        const oneDay = 24 * 60 * 60 * 1000;
+        const dateOne = new Date(data.mintedOn);
+        const dateTwo = new Date();
+        console.log(data.period);
+        const diffTime = Math.floor(Math.abs(dateTwo - dateOne) / oneDay);
+        console.log(diffTime);
+        setWarrantyLeft(data.period - diffTime);
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -135,7 +145,7 @@ const Slug = () => {
                   className={styles.image_left_1}
                 />
                 <div className={styles.below_image}>
-                  <h4>21 days left</h4>
+                  <h4>{warrantyLeft} day(s) left</h4>
                   <div className={styles.time}>
                     <Image
                       src="/time.png"
@@ -154,7 +164,7 @@ const Slug = () => {
                   <div className={styles.verify}>
                     <p>
                       {product.minter == ''
-                        ? 'Warranty card not minter yet'
+                        ? 'Warranty card not minted yet'
                         : product.brand}
                     </p>
                   </div>
@@ -173,10 +183,23 @@ const Slug = () => {
                 </div>
                 <div className={styles.submit}>
                   <button
-                    style={{ marginTop: '10px', cursor: 'pointer' }}
                     onClick={() => {
                       toggleClaim();
                     }}
+                    disabled={product.minter == '' ? true : false}
+                    style={
+                      product.minter == ''
+                        ? {
+                            display: 'none',
+                            marginTop: '10px',
+                            cursor: 'pointer',
+                          }
+                        : {
+                            display: 'block',
+                            marginTop: '10px',
+                            cursor: 'pointer',
+                          }
+                    }
                   >
                     {claimed ? 'Resolve claim' : 'Claim warranty'}
                   </button>
@@ -193,26 +216,24 @@ const Slug = () => {
                   <div className={styles.header__item}>Date</div>
                 </div>
                 <div className={styles.table_content}>
-                  <div className={styles.table_row}>
-                    {console.log(transactions)}
+                  {console.log(transactions)}
 
-                    {transactions &&
-                      transactions.map((txn, idx) => (
-                        <>
-                          <div className={styles.table_data}>{txn.event}</div>
-                          <div className={styles.table_data}>{txn.from}</div>
-                          <div className={styles.table_data}>{txn.to}</div>
-                          <div className={styles.table_data}>
-                            <a
-                              href={`https://mumbai.polygonscan.com/tx/${txn.txnHash}`}
-                            >
-                              {txn.txnHash}
-                            </a>
-                          </div>
-                          <div className={styles.table_data}>{txn.date}</div>
-                        </>
-                      ))}
-                  </div>
+                  {transactions &&
+                    transactions.map((txn, idx) => (
+                      <div className={styles.table_row}>
+                        <div className={styles.table_data}>{txn.event}</div>
+                        <div className={styles.table_data}>{txn.from}</div>
+                        <div className={styles.table_data}>{txn.to}</div>
+                        <div className={styles.table_data}>
+                          <a
+                            href={`https://mumbai.polygonscan.com/tx/${txn.txnHash}`}
+                          >
+                            {txn.txnHash}
+                          </a>
+                        </div>
+                        <div className={styles.table_data}>{txn.date}</div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
