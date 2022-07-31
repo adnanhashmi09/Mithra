@@ -18,11 +18,11 @@ import { ethers } from 'ethers';
 
 const styles = {
   position: 'absolute',
-  top: '30%',
-  left: '50%',
-  transform: 'rotate(-45deg) translate(-50%, -50%)',
+  top: '90%',
+  left: '80%',
+  transform: 'rotate(-0deg) translate(-50%, -50%)',
   fontWeight: 'bold',
-  fontSize: '70px',
+  fontSize: '50px',
   color: '#c50f0f',
   display: 'block',
 };
@@ -103,7 +103,6 @@ const ProductDetails = ({ product, products }) => {
     };
 
     console.log(body);
-    // return;
 
     const resp = await fetch('http://localhost:5050/token/register', {
       method: 'POST',
@@ -140,24 +139,24 @@ const ProductDetails = ({ product, products }) => {
       error: ' Transaction failed',
     });
     initApproval(email, product);
+    
+     // const stripe = await getStripe();
+     // const gas = 70;
+     // const response = await fetch('/api/stripe', {
+       // method: 'POST',
+       // headers: {
+         // 'Content-Type': 'application/json',
+       // },
+       // body: JSON.stringify([{ product, qty, gas }]),
+     // });
 
-    const stripe = await getStripe();
-    const gas = 20;
-    const response = await fetch('/api/stripe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([{ product, qty, gas }]),
-    });
+     // if (response.statusCode === 500) return;
 
-    if (response.statusCode === 500) return;
+     // const data = await response.json();
 
-    const data = await response.json();
+     // toast.loading('Redirecting...');
 
-    toast.loading('Redirecting...');
-
-    stripe.redirectToCheckout({ sessionId: data.id });
+     // stripe.redirectToCheckout({ sessionId: data.id });
   };
 
   return (
@@ -199,7 +198,11 @@ const ProductDetails = ({ product, products }) => {
           </div>
           <h4>Details: </h4>
           <p>{details}</p>
-          <p className="price">₹ {price}</p>
+          <p className="price">₹ {price} <span 
+          style={{
+            fontSize: '1rem',
+            color: 'black'
+            }}>(exclusive of warranty charges)</span></p>
 
           <div
             className="buttons"

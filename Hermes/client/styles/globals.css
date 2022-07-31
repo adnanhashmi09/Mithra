@@ -146,11 +146,11 @@ span.text-red {
 
 .product-card.sold .imageContainer span {
   position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: rotate(-45deg) translate(-50%, -50%);
+  top: 90%;
+  left: 80%;
+  transform: rotate(-0deg) translate(-50%, -50%);
   font-weight: bold;
-  font-size: 50px;
+  font-size: 30px;
   color: #c50f0f;
   display: block;
 }
