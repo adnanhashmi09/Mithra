@@ -265,7 +265,6 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 		}
 
 	} else {
-		presentToken.Owner = token.Owner
 		presentToken.Approval = token.Approval
 		presentToken.Email = token.Email
 		presentToken.SaleDate = token.SaleDate
