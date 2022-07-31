@@ -121,7 +121,7 @@ function Approval({
       let txnData;
 
       await toast.promise(prm, {
-        loading: 'Minting Token...',
+        loading: 'Transferring token',
         success: (data) => {
           txnData = data;
           return 'Token transferred successfully';
@@ -200,7 +200,7 @@ function Approval({
       });
     } catch (error) {
       if (error.message.includes('Warranty: already minted')) {
-        toast.error('Warranty card already minter');
+        toast('Token seems to be already minted\nTrying transfer.')
 
         const transaction = await transferTokenToNewUser(to);
         return new Promise((resolve, reject) => {

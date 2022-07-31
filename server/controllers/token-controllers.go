@@ -253,6 +253,9 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 			token.Approval.From = token.BrandAddress
 			token.Owner = token.BrandAddress
 		}
+		log.Println("metahash was not found: ", token.Approval.From)
+		log.Println("metahash was not found: ", token.Approval.To)
+		log.Println("metahash was not found: ", token.Owner)
 		// token.Transactions = append(token.Transactions, presentToken.Transactions...)
 		token.ApprovalStatus = false
 
@@ -266,7 +269,9 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 		}
 
 	} else {
+		log.Println("=====tokenApproval============", token.Approval.From)
 		presentToken.Approval = token.Approval
+		log.Println("presentTokenApproval:", presentToken.Approval.From)
 		presentToken.Email = token.Email
 		presentToken.SaleDate = token.SaleDate
 		presentToken.ApprovalStatus = false
