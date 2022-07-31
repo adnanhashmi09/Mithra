@@ -123,6 +123,7 @@ func GetToken(w http.ResponseWriter, r *http.Request) {
 
 	err := mh.GetSingleToken(token, filter)
 	if err != nil {
+		fmt.Println("Error", err)
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}

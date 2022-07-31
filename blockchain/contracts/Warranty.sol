@@ -222,7 +222,7 @@ if (error.message.includes('Warranty: already minted')) {
             return 0;
         }
         else{
-            return block.timestamp - startTime;
+            return length - (block.timestamp - startTime);
         }
     }
 

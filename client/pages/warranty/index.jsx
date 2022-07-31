@@ -36,6 +36,8 @@ function warranty() {
       return;
     }
 
+    console.log(body);
+
     const response = await fetch('http://localhost:5050/token/single', {
       method: 'POST',
       headers: {

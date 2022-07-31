@@ -95,7 +95,11 @@ const Slug = () => {
         console.log(data.period);
         const diffTime = Math.floor(Math.abs(dateTwo - dateOne) / oneDay);
         console.log(diffTime);
-        setWarrantyLeft(data.period - diffTime);
+        // if (data.period - diffTime > 0) {
+        //   setWarrantyLeft(data.period - diffTime);
+        // } else {
+        //   setWarrantyLeft(0);
+        // }
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -105,14 +109,40 @@ const Slug = () => {
           provider
         );
 
-        const checkWarranty = await contract.checkIfWarrantyIsOver(2);
-        // const temp = ethers.utils.arrayify(checkWarranty._hex);
-        // console.log(temp);
+        if (data.minter != '') {
+          const checkWarranty = await contract.checkIfWarrantyIsOver(
+            data.tokenId
+          );
+          const temp = ethers.BigNumber.from(checkWarranty).toNumber();
+          console.log('check warranty', temp / (60 * 60 * 24));
 
-        const seconds = ethers.BigNumber.from(checkWarranty).toNumber();
+          // round number to 1 decimal place
+          const roundedData = Math.round((temp / (60 * 60 * 24)) * 10) / 10;
+
+          setWarrantyLeft(roundedData);
+        }
+        console.log(data);
+
+        if (data.tokenId) {
+          const startTime = await contract.getStartTime(data.tokenId);
+          console.log(
+            'start time',
+            ethers.BigNumber.from(startTime).toNumber()
+          );
+          const length = await contract.getWarrantyLength(data.tokenId);
+          console.log('length time', ethers.BigNumber.from(length).toNumber());
+          const blockTime = await contract.getBlockTimestamp();
+          console.log(
+            'block time',
+            ethers.BigNumber.from(blockTime).toNumber()
+          );
+        }
+        console.log('token id', product.tokenId);
+
+        // const seconds = ethers.BigNumber.from(checkWarranty).toNumber();
         setClaimed(data.claim);
-        console.log(checkWarranty);
-        console.log(seconds / (24 * 60 * 60));
+        // console.log(checkWarranty);
+        // console.log(seconds / (24 * 60 * 60));
       } catch (error) {
         setIsValid(false);
         console.log(error);

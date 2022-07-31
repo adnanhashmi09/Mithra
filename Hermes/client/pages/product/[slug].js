@@ -140,7 +140,7 @@ const ProductDetails = ({ product, products }) => {
       error: ' Transaction failed',
     });
     initApproval(email, product);
-    return;
+
     const stripe = await getStripe();
     const gas = 20;
     const response = await fetch('/api/stripe', {
