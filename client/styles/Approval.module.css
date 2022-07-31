@@ -10,6 +10,10 @@
   padding: 2rem 2rem;
 }
 
+.box.claimed {
+  outline: 2px solid #78e4ff;
+}
+
 .image {
   border-radius: 0.3rem;
 }
@@ -59,6 +63,26 @@
   font-size: 0.8rem;
   color: #aba9a9;
   margin: 0;
+}
+
+.warranty {
+  margin-top: 0;
+  display: flex;
+  flex-flow: row nowrap;
+}
+.warranty h5 {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #aba9a9;
+  margin: 0;
+}
+
+.warranty p {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #aba9a9;
+  margin: 0;
+  margin-left: 0.5rem;
 }
 
 .owner h5 {

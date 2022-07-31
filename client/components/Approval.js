@@ -19,6 +19,7 @@ function Approval({
   saleDate,
   contractAddress,
   tab,
+  email,
   tokenId,
 }) {
   const handleApproval = async (e) => {
@@ -208,7 +209,7 @@ function Approval({
   };
 
   return (
-    <div className={styles.box}>
+    <div className={`${styles.box} ${styles.claimed}`}>
       <div className={styles.imgdiv}>
         <img src={tokenUri} className={styles.image} />
       </div>
@@ -235,6 +236,11 @@ function Approval({
             <div className={styles.verify}>
               <p>{saleDate}</p>
             </div>
+          </div>
+
+          <div className={styles.warranty}>
+            <h5 style={{ color: '#ff48fa' }}>Warranty Claimed: </h5>
+            <p>{email}</p>
           </div>
 
           <>

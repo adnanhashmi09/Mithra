@@ -26,10 +26,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  margin-top: 4rem;
+  margin: 4rem auto;
 }
 
-@media screen and (max-width: 927px) {
+@media screen and (max-width: 1407px) {
   .cardContainer {
     grid-template-columns: 1fr;
   }
