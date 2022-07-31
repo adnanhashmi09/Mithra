@@ -24,7 +24,7 @@ func (mh *MongoHandler) GetTokens(filter interface{}) []*Token {
 		err = cur.Decode(token)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 
 		tokens = append(tokens, token)

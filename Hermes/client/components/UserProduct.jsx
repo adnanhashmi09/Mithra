@@ -136,10 +136,10 @@ const UserProduct = ({
             )}
           </p>
           <a
-            href="https://etherscan.io/address/0x0676d673a2a0a13fe37a3ec7812a8ccc571ca07b"
+            href={`https://etherscan.io/address/${_id}`}
             className="product-address"
           >
-            63FaC9201494f0bd17B9892B9fae4d52fe3BD377
+            {_id}
           </a>
           <div className="buttons">
             <button

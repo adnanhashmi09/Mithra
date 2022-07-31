@@ -44,47 +44,51 @@ function Approval({
     const data = await res.json();
     console.log(data);
 
-    const date1 = new Date();
-    const today = date1.setFullYear(date1.getFullYear() + 0);
-    const date2 = date1.setFullYear(date1.getFullYear() + data.response.period);
-    const diffTime = Math.abs(date2 - today);
-    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // const date1 = new Date();
+    // const today = date1.setFullYear(date1.getFullYear() + 0);
+    // const date2 = date1.setFullYear(date1.getFullYear() + data.response.period);
+    // const diffTime = Math.abs(date2 - today);
+    // const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    const transaction = await mintToken(
-      data.response.approval.to,
-      data.response.metaHash,
-      data.response.tokenUri,
-      days
-    ); // get a txnHash here
+    try {
+      const transaction = await mintToken(
+        data.response.approval.to,
+        data.response.metaHash,
+        data.response.tokenUri,
+        data.response.period
+      ); // get a txnHash here
 
-    const approval = data.response.approval;
-    approval.txnHash = transaction.txnHash;
-    response = await signMessage(brandAddress);
+      const approval = data.response.approval;
+      approval.txnHash = transaction.txnHash;
+      response = await signMessage(brandAddress);
 
-    console.log(response.error);
-    if (response.error) {
-      toast.error(
-        'Signature not valid. Please connect with your wallet and reload.'
-      );
+      console.log(response.error);
+      if (response.error) {
+        toast.error(
+          'Signature not valid. Please connect with your wallet and reload.'
+        );
+      }
+
+      console.log(response);
+
+      const txnRsp = await fetch('http://localhost:5050/token/approve/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          Approval: approval,
+          productId: productId,
+          ethAddress: response.address,
+          signature: response.signature,
+          tokenId: transaction.decoded_token_id
+            ? transaction.decoded_token_id
+            : 0,
+        }),
+      });
+      const dat = await txnRsp.json();
+      console.log(dat);
+    } catch (error) {
+      toast.error('error');
     }
-
-    console.log(response);
-
-    const txnRsp = await fetch('http://localhost:5050/token/approve/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        Approval: approval,
-        productId: productId,
-        ethAddress: response.address,
-        signature: response.signature,
-        tokenId: transaction.decoded_token_id
-          ? transaction.decoded_token_id
-          : 0,
-      }),
-    });
-    const dat = await txnRsp.json();
-    console.log(dat);
   };
 
   const transferTokenToNewUser = async (to) => {

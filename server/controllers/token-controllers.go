@@ -71,6 +71,12 @@ func GetTokensByBrand(w http.ResponseWriter, r *http.Request) {
 func GetTokensByOwner(w http.ResponseWriter, r *http.Request) {
 	token := &db.Token{}
 	json.NewDecoder(r.Body).Decode(token)
+
+	if token.Owner == "" {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
 	filter := bson.M{"$or": []bson.M{{"owner": token.Owner}, {"approval.to": token.Owner}}}
 	tokens := mh.GetTokens(filter)
 

@@ -21,15 +21,19 @@ function myItems() {
       // console.log(items);
     }
 
-    const res = await fetch('http://localhost:5050/token/owner/all', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ owner: address }),
-    });
+    try {
+      const res = await fetch('http://localhost:5050/token/owner/all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ owner: address }),
+      });
 
-    const ServerData = await res.json();
-    // console.log(ServerData);
-    setData(ServerData.tokens);
+      const ServerData = await res.json();
+      // console.log(ServerData);
+      setData(ServerData.tokens);
+    } catch (error) {
+      console.log(error);
+    }
   }, [address, reload]);
 
   return (

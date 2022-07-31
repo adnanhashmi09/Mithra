@@ -23,6 +23,8 @@
 //   });
 // };
 
+import { ethers } from 'ethers';
+
 export async function signMessage(address) {
   try {
     // const response = await fetch(
@@ -31,11 +33,13 @@ export async function signMessage(address) {
     // const { nonce } = await response.json();
 
     // generate random number
-    const nonce = '' + Math.floor(Math.random() * 100);
+    const nonce = '' + Math.floor(Math.random() * 10000);
+
+    const nonceHex = ethers.utils.hexlify(ethers.utils.toUtf8Bytes('' + nonce));
 
     const signature = await window.ethereum.request({
       method: 'personal_sign',
-      params: [nonce, address],
+      params: [nonceHex, address],
     });
 
     return new Promise(function (resolve, reject) {
