@@ -27,15 +27,22 @@
 
 To run this project follow the below steps:
 
-- To run the next.js client server for मिthra UI:
+- To compile solidity contracts:
+```BASH
+cd ./blockchain
+yarn install // install dependencies
+npx hardhat compile
 ```
+
+- To run the next.js client server for मिthra UI:
+```BASH
 cd ./client
 yarn install // install dependencies
 yarn dev
 ```
 
 - To start the Go server:
-```
+```BASH
 cd ./server
 go mod tidy // install dependencies
 cd ./cmd
@@ -45,7 +52,7 @@ starts the server on `port:5050`
 
 - To start the `hermes` e-commerce client:
 
-```
+```BASH
 cd ./hermes/client
 yarn install // install dependencies
 yarn dev
