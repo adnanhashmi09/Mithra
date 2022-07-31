@@ -170,7 +170,7 @@ func AddApprovedToken(w http.ResponseWriter, r *http.Request) {
 
 	mssg := fmt.Sprintf(
 		`Your token for product ID: %s, and IPFS Hash: %s has been approved. 
-		You can now avail warranty benefits. This warranty will expire in %d days`,
+		You can now avail warranty benefits. This warranty will expire in %d day(s)`,
 		presentToken.ProductId, presentToken.MetaHash, presentToken.Period,
 	)
 	err = sendMail(approval.Email, mssg)
@@ -323,11 +323,7 @@ func SetClaim(w http.ResponseWriter, r *http.Request) {
 
 // GetTokenNonce fetches the nonce associated to the ethereum address of the brand
 func GetTokenNonce(w http.ResponseWriter, r *http.Request) {
-	// filter := db.Token{}
-	// json.NewDecoder(r.Body).Decode(&filter)
-
 	productId := chi.URLParam(r, "productId")
-	log.Println("=============", productId)
 
 	token := db.Token{}
 	err := mh.GetSingleToken(&token, bson.M{"productId": productId})
@@ -337,7 +333,6 @@ func GetTokenNonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	nonce := token.Nonce
-	log.Println("=====nonce========", nonce)
 
 	nonceHex := hex.EncodeToString([]byte(nonce))
 
