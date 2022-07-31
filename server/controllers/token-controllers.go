@@ -270,6 +270,40 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 	)
 }
 
+func SetClaim(w http.ResponseWriter, r *http.Request) {
+	token := &db.Token{}
+	json.NewDecoder(r.Body).Decode(&token)
+
+	address := r.Context().Value(Key("address")).(string)
+
+	filter := bson.M{"productId": token.ProductId}
+	presentToken := &db.Token{}
+	err := mh.GetSingleToken(presentToken, filter)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
+	if presentToken.Owner != address {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	_, err = mh.UpdateSingleToken(filter, bson.M{"$set": bson.M{"claim": token.Claim}})
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(
+		TokenResponse{
+			Status:  "success",
+			Failure: false,
+		},
+	)
+}
+
 // GetTokenNonce fetches the nonce associated to the ethereum address of the brand
 func GetTokenNonce(w http.ResponseWriter, r *http.Request) {
 	filter := db.Token{}

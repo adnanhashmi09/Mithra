@@ -20,6 +20,7 @@ type Token struct {
 	Owner           string        `json:"owner" bson:"owner"`
 	TokenId         int           `json:"tokenId" bson:"tokenId"`
 	Nonce           string        `json:"nonce" bson:"nonce"`
+	Claim           bool          `json:"claim" bson:"claim"`
 	ProductId       string        `json:"productId" bson:"productId"`
 	Brand           string        `json:"brand" bson:"brand"`
 	BrandAddress    string        `json:"brandAddress" bson:"brandAddress"`
