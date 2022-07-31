@@ -67,6 +67,11 @@
 
 .warranty {
   margin-top: 0;
+  display: none;
+  flex-flow: row nowrap;
+}
+
+.warranty.claimed {
   display: flex;
   flex-flow: row nowrap;
 }

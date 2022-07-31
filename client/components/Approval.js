@@ -209,7 +209,7 @@ function Approval({
   };
 
   return (
-    <div className={`${styles.box} ${styles.claimed}`}>
+    <div className={`${styles.box}`}>
       <div className={styles.imgdiv}>
         <img src={tokenUri} className={styles.image} />
       </div>
