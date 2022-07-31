@@ -17,14 +17,17 @@ type IpfsRsp struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
+type Attribute struct {
+	TraitType string `json:"trait_type"`
+	Value     string `json:"value"`
+}
+
 type IpfsMetadata struct {
-	Name           string        `json:"name"`
-	ProductId      string        `json:"productId"`
-	Description    string        `json:"description"`
-	Minter         string        `json:"minter"`
-	Brand          string        `json:"brand"`
-	TokenURI       string        `json:"tokenUri"`
-	WarrantyPeriod time.Duration `json:"warrantyPeriod"`
+	Name        string       `json:"name"`
+	ExternalUrl string       `json:"external_url"`
+	Image       string       `json:"image"`
+	Description string       `json:"description"`
+	Attributes  []*Attribute `json:"attributes"`
 }
 
 func PinFileToIPFS(file *multipart.FileHeader, api_key string, api_secret string) (*IpfsRsp, error) {
