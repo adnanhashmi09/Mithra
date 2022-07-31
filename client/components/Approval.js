@@ -22,6 +22,8 @@ function Approval({
   email,
   tokenId,
   claim,
+  setReload,
+  reload,
 }) {
   const handleApproval = async (e) => {
     e.preventDefault();
@@ -53,15 +55,15 @@ function Approval({
     // const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     try {
-      const transaction = await mintToken(
-        data.response.approval.to,
-        data.response.metaHash,
-        data.response.tokenUri,
-        data.response.period
-      ); // get a txnHash here
+      // const transaction = await mintToken(
+      //   data.response.approval.to,
+      //   data.response.metaHash,
+      //   data.response.tokenUri,
+      //   data.response.period
+      // ); // get a txnHash here
 
       const approval = data.response.approval;
-      approval.txnHash = transaction.txnHash;
+      approval.txnHash = transaction.txnHash || '';
       response = await signMessage(brandAddress);
 
       console.log(response.error);
@@ -88,8 +90,10 @@ function Approval({
       });
       const dat = await txnRsp.json();
       console.log(dat);
+      // setReload(!reload);
     } catch (error) {
       toast.error('error');
+      console.log(error);
     }
   };
 
@@ -142,7 +146,7 @@ function Approval({
       if (error.message.includes('Warranty: token is not out for sale')) {
         toast.error('Token is not out for sale');
       } else {
-        toast.error('error');
+        toast.error('error in transfer token');
       }
     }
   };
@@ -203,7 +207,7 @@ function Approval({
           resolve(transaction);
         });
       } else {
-        toast.error('error');
+        toast.error('error in mint token');
         console.log(error);
       }
     }

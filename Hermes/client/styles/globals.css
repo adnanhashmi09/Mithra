@@ -230,12 +230,10 @@ span.text-red {
 }
 
 .text .approved {
-  color: #0fce08;
+  color: #1f941b;
 }
 
 .text .product-address {
-  font-style: italic;
-  opacity: 0.4;
   text-decoration: underline;
   margin-top: 10px;
   width: 250px;
@@ -243,6 +241,7 @@ span.text-red {
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
+  color: #3b4483;
 }
 
 .hero-banner-container {
@@ -647,7 +646,7 @@ footer {
 
 .buttons .input-email {
   height: 3rem;
-  border:  none;
+  border: none;
   border-bottom: 2px solid #888888;
   padding: 10px;
   font-size: 1rem;
@@ -897,4 +896,3 @@ footer {
     margin: auto;
   }
 }
-

@@ -226,6 +226,18 @@ if (error.message.includes('Warranty: already minted')) {
         }
     }
 
+    function getStartTime(uint256 tokenId) external view returns(uint){
+      return warrantyPeriod[tokenId].startTime;
+    }
+
+    function getWarrantyLength(uint256 tokenId) external view returns(uint){
+        return warrantyPeriod[tokenId].length;
+    }
+
+    function getBlockTimestamp() external view returns(uint){
+        return block.timestamp;
+    }
+
     ///---------------------------------------------------------------------------------------------------------------------
     ///---------------------------------------------------------------------------------------------------------------------
 

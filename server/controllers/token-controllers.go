@@ -247,19 +247,36 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if token.Owner == "" {
-		token.Owner = token.BrandAddress
-	}
-	token.Transactions = append(token.Transactions, presentToken.Transactions...)
-	token.ApprovalStatus = false
+	if presentToken.MetaHash == "" {
+		if token.Owner == "" {
+			token.Approval.From = token.BrandAddress
+			token.Owner = token.BrandAddress
+		}
+		// token.Transactions = append(token.Transactions, presentToken.Transactions...)
+		token.ApprovalStatus = false
 
-	nonce, _ := genNonce()
-	token.Nonce = nonce
+		nonce, _ := genNonce()
+		token.Nonce = nonce
 
-	_, err = mh.ReplaceToken(token, bson.M{"productId": token.ProductId})
-	if err != nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
+		_, err = mh.ReplaceToken(token, bson.M{"productId": token.ProductId})
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			return
+		}
+
+	} else {
+		presentToken.Owner = token.Owner
+		presentToken.Approval = token.Approval
+		presentToken.Email = token.Email
+		presentToken.SaleDate = token.SaleDate
+		presentToken.ApprovalStatus = false
+
+		_, err = mh.ReplaceToken(presentToken, bson.M{"productId": token.ProductId})
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			return
+		}
+
 	}
 
 	w.WriteHeader(http.StatusCreated)

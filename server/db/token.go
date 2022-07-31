@@ -27,7 +27,7 @@ type Token struct {
 	ContractAddress string        `json:"contractAddress" bson:"contractAddress"`
 	MetaHash        string        `json:"metaHash" bson:"metaHash"`
 	TokenURI        string        `json:"tokenUri" bson:"tokenUri"`
-	Minter          string        `json:"minter,omitempty" bson:"minter,omitempty"`
+	Minter          string        `json:"minter" bson:"minter"`
 	MintedOn        time.Time     `json:"mintedOn" bson:"mintedOn"`
 	Period          time.Duration `json:"period" bson:"period"`
 	Description     string        `json:"description" bson:"description"`

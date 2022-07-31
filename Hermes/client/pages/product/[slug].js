@@ -14,6 +14,7 @@ import { useStateContext } from '../../context/StateContext';
 import useCheckWeb3Support from '../../hooks/checkWeb3Support';
 
 import { signMessage } from '../../lib/signMessage';
+import { ethers } from 'ethers';
 
 const styles = {
   position: 'absolute',
@@ -57,6 +58,11 @@ const ProductDetails = ({ product, products }) => {
 
     return result.join('');
   }
+
+  useEffect(() => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const gasPrice = provider.getGasPrice();
+  });
 
   const initApproval = async (emailAddress, product) => {
     const img = product.image[0].asset._ref;

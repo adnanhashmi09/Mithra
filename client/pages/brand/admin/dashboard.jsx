@@ -16,6 +16,7 @@ function Admin() {
   const [valid, setValid] = useState(false);
   const [products, setProducts] = useState({ Approved: [], Pending: [] });
   const [brand, setBrand] = useState('');
+  const [reload, setReload] = useState(false);
   const handleSelect = (e) => {
     setTab(e.target.value);
   };
@@ -52,7 +53,7 @@ function Admin() {
         console.log(data);
       }
     })();
-  }, [brandAddress]);
+  }, [brandAddress, reload]);
 
   return (
     <>
@@ -107,6 +108,8 @@ function Admin() {
                     tab={tab}
                     brandAddress={brandAddress}
                     key={`approvals ${index}`}
+                    setReload
+                    reload
                   />
                 ))}
               </div>

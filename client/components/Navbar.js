@@ -49,7 +49,7 @@ function Navbar(props) {
           <div className={styles.details}>
             <div className={styles.navs}>
               <ul>
-                <Link href="/">
+                {/* <Link href="/">
                   <li>
                     Home
                     {und === 'home' ? (
@@ -58,7 +58,7 @@ function Navbar(props) {
                       ''
                     )}
                   </li>
-                </Link>
+                </Link> */}
                 {/* <Link href="/shop">
                   <li>
                     Shop

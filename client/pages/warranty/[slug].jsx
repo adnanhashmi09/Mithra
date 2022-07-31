@@ -82,8 +82,8 @@ const Slug = () => {
 
         const data = await response.json();
         setProduct(data);
-        console.log(data);
-        console.log(product.transactions);
+        // console.log(data);
+        // console.log(product.transactions);
         setTransactions(data.transactions);
         setIsValid(true);
 
@@ -96,6 +96,8 @@ const Slug = () => {
         );
 
         const checkWarranty = await contract.checkIfWarrantyIsOver(2);
+        // const temp = ethers.utils.arrayify(checkWarranty._hex);
+        // console.log(temp);
 
         const seconds = ethers.BigNumber.from(checkWarranty).toNumber();
         setClaimed(data.claim);
@@ -150,7 +152,11 @@ const Slug = () => {
                 <div className={styles.minter}>
                   <h5>Minter</h5>
                   <div className={styles.verify}>
-                    <p>{product.brand}</p>
+                    <p>
+                      {product.minter == ''
+                        ? 'Warranty card not minter yet'
+                        : product.brand}
+                    </p>
                   </div>
                 </div>
                 <div className={styles.owner}>
@@ -190,21 +196,22 @@ const Slug = () => {
                   <div className={styles.table_row}>
                     {console.log(transactions)}
 
-                    {transactions.map((txn, idx) => (
-                      <>
-                        <div className={styles.table_data}>{txn.event}</div>
-                        <div className={styles.table_data}>{txn.from}</div>
-                        <div className={styles.table_data}>{txn.to}</div>
-                        <div className={styles.table_data}>
-                          <a
-                            href={`https://mumbai.polygonscan.com/tx/${txn.txnHash}`}
-                          >
-                            {txn.txnHash}
-                          </a>
-                        </div>
-                        <div className={styles.table_data}>{txn.date}</div>
-                      </>
-                    ))}
+                    {transactions &&
+                      transactions.map((txn, idx) => (
+                        <>
+                          <div className={styles.table_data}>{txn.event}</div>
+                          <div className={styles.table_data}>{txn.from}</div>
+                          <div className={styles.table_data}>{txn.to}</div>
+                          <div className={styles.table_data}>
+                            <a
+                              href={`https://mumbai.polygonscan.com/tx/${txn.txnHash}`}
+                            >
+                              {txn.txnHash}
+                            </a>
+                          </div>
+                          <div className={styles.table_data}>{txn.date}</div>
+                        </>
+                      ))}
                   </div>
                 </div>
               </div>

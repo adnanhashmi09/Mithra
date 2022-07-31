@@ -136,7 +136,7 @@ const UserProduct = ({
             )}
           </p>
           <a
-            href={`https://etherscan.io/address/${_id}`}
+            href={`http://localhost:3000/warranty/${_id}`}
             className="product-address"
           >
             {_id}
