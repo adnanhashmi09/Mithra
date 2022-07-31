@@ -7,6 +7,7 @@ import (
 )
 
 func TokenRoutes(r chi.Router) {
+	r.Get("/nonce/{productId}", controllers.GetTokenNonce)
 	r.Post("/single", controllers.GetToken)
 	r.Post("/register", controllers.RegisterToken)
 	r.Post("/owner/all", controllers.GetTokensByOwner)

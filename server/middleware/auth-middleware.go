@@ -41,6 +41,7 @@ func VerifyAddress(next http.Handler) http.Handler {
 			var err error
 			if auth.VerifyOwner {
 				data, err = controllers.GenTokenNonce(auth.EthAddress)
+
 			} else {
 				data, err = controllers.GenBrandNonce(auth.EthAddress)
 			}

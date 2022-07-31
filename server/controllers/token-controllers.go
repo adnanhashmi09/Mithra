@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"warranty.com/db"
@@ -306,17 +307,22 @@ func SetClaim(w http.ResponseWriter, r *http.Request) {
 
 // GetTokenNonce fetches the nonce associated to the ethereum address of the brand
 func GetTokenNonce(w http.ResponseWriter, r *http.Request) {
-	filter := db.Token{}
-	json.NewDecoder(r.Body).Decode(&filter)
+	// filter := db.Token{}
+	// json.NewDecoder(r.Body).Decode(&filter)
+
+	productId := chi.URLParam(r, "productId")
+	log.Println("=============", productId)
 
 	token := db.Token{}
-	err := mh.GetSingleToken(&token, filter)
+	err := mh.GetSingleToken(&token, bson.M{"productId": productId})
 	if err != nil {
 		http.Error(w, fmt.Sprintln(err), http.StatusBadRequest)
 		return
 	}
 
 	nonce := token.Nonce
+	log.Println("=====nonce========", nonce)
+
 	nonceHex := hex.EncodeToString([]byte(nonce))
 
 	json.NewEncoder(w).Encode(

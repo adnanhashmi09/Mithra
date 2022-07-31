@@ -45,3 +45,29 @@ export async function signMessage(address) {
     });
   }
 }
+
+export async function signOwnerMessage(productId, address) {
+  try {
+    const response = await fetch(
+      `http://localhost:5050/token/nonce/${productId}`
+    );
+    const { nonce } = await response.json();
+
+    console.log(nonce);
+    console.log(address);
+
+    const signature = await window.ethereum.request({
+      method: 'personal_sign',
+      params: [nonce, address],
+    });
+
+    return new Promise(function (resolve, reject) {
+      resolve({ signature, address });
+    });
+  } catch (error) {
+    console.log(error);
+    return new Promise(function (resolve, reject) {
+      resolve({ error });
+    });
+  }
+}

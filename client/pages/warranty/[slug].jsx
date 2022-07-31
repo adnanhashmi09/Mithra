@@ -20,6 +20,8 @@ import Head from 'next/head';
 
 import { ethers } from 'ethers';
 import Warranty from '../../../blockchain/artifacts/contracts/Warranty.sol/Warranty.json';
+import { useStateContext } from '../../context/stateContext';
+import { signOwnerMessage } from '../../lib/checkWeb3';
 
 const Slug = () => {
   const router = useRouter();
@@ -27,7 +29,44 @@ const Slug = () => {
   const [product, setProduct] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [isValid, setIsValid] = useState(false);
+  const [claimed, setClaimed] = useState(false);
+
+  const { brandAddress } = useStateContext();
+
   console.log(slug);
+
+  const toggleClaim = async () => {
+    try {
+      if (brandAddress == '') {
+        toast.error('Please connect with your wallet.');
+        return;
+      }
+      const response = await signOwnerMessage(slug, brandAddress);
+      const { signature, address: signedAddress } = response;
+
+      const res = await fetch('http://localhost:5050/token/claim', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          verifyOwner: true,
+          signature: signature,
+          ethAddress: brandAddress,
+          productId: slug,
+          claim: !claimed,
+        }),
+      });
+
+      if (!res.ok) {
+        throw Error('Error!');
+      }
+
+      const data = await res.json();
+      setClaimed(!claimed);
+    } catch (error) {
+      console.log(error);
+      toast.error('Error!');
+    }
+  };
 
   useEffect(() => {
     if (!slug) return;
@@ -59,6 +98,7 @@ const Slug = () => {
         const checkWarranty = await contract.checkIfWarrantyIsOver(2);
 
         const seconds = ethers.BigNumber.from(checkWarranty).toNumber();
+        setClaimed(data.claim);
         console.log(checkWarranty);
         console.log(seconds / (24 * 60 * 60));
       } catch (error) {
@@ -128,9 +168,11 @@ const Slug = () => {
                 <div className={styles.submit}>
                   <button
                     style={{ marginTop: '10px', cursor: 'pointer' }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      toggleClaim();
+                    }}
                   >
-                    Claim warranty
+                    {claimed ? 'Resolve claim' : 'Claim warranty'}
                   </button>
                 </div>
               </div>

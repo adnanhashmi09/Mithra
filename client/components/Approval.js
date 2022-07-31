@@ -21,6 +21,7 @@ function Approval({
   tab,
   email,
   tokenId,
+  claim,
 }) {
   const handleApproval = async (e) => {
     e.preventDefault();
@@ -209,7 +210,7 @@ function Approval({
   };
 
   return (
-    <div className={`${styles.box}`}>
+    <div className={`${styles.box} ${claim ? styles.claimed : ''}`}>
       <div className={styles.imgdiv}>
         <img src={tokenUri} className={styles.image} />
       </div>
@@ -238,9 +239,9 @@ function Approval({
             </div>
           </div>
 
-          <div className={styles.warranty}>
+          <div className={`${styles.warranty} ${claim ? styles.claimed : ''}`}>
             <h5 style={{ color: '#ff48fa' }}>Warranty Claimed: </h5>
-            <p>{email}</p>
+            <a href={`mailto:${email}`}>{email}</a>
           </div>
 
           <>
