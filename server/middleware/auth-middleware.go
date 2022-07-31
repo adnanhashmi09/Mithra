@@ -17,10 +17,10 @@ import (
 )
 
 type Auth struct {
-	Signature  string `json:"signature,omitempty"`
-	EthAddress string `json:"ethAddress"`
-	ProductId  string `json:"productId"`
-	// UserType   string `json:"userType"`
+	Signature   string `json:"signature,omitempty"`
+	EthAddress  string `json:"ethAddress"`
+	ProductId   string `json:"productId"`
+	VerifyOwner bool   `json:"verifyOwner"`
 }
 
 func VerifyAddress(next http.Handler) http.Handler {
@@ -37,10 +37,13 @@ func VerifyAddress(next http.Handler) http.Handler {
 			r.Body.Close()
 			r.Body = ioutil.NopCloser(buf)
 
-			log.Println(auth.EthAddress)
-			data, err := controllers.GenBrandNonce(auth.EthAddress)
-
-			// time.Sleep(1 * time.Second)
+			var data string
+			var err error
+			if auth.VerifyOwner {
+				data, err = controllers.GenTokenNonce(auth.EthAddress)
+			} else {
+				data, err = controllers.GenBrandNonce(auth.EthAddress)
+			}
 
 			if err != nil {
 				http.Error(w, fmt.Sprintln(err), http.StatusBadRequest)

@@ -252,6 +252,9 @@ func RegisterToken(w http.ResponseWriter, r *http.Request) {
 	token.Transactions = append(token.Transactions, presentToken.Transactions...)
 	token.ApprovalStatus = false
 
+	nonce, _ := genNonce()
+	token.Nonce = nonce
+
 	_, err = mh.ReplaceToken(token, bson.M{"productId": token.ProductId})
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
@@ -319,7 +322,7 @@ func GenTokenNonce(ethAddress string) (string, error) {
 		return oldNonce, err
 	}
 
-	filter := bson.M{"ethAddress": ethAddress}
+	filter := bson.M{"owner": ethAddress}
 	updateResult, err := mh.UpdateSingleToken(filter, bson.M{"$set": bson.M{"nonce": nonce}})
 	if err != nil {
 		return oldNonce, err
