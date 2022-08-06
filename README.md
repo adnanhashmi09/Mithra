@@ -38,7 +38,7 @@ npx hardhat compile
 ```BASH
 cd ./client
 yarn install // install dependencies
-yarn dev
+yarn dev -p 3000
 ```
 
 - To start the Go server:
@@ -55,5 +55,5 @@ starts the server on `port:5050`
 ```BASH
 cd ./hermes/client
 yarn install // install dependencies
-yarn dev
+yarn dev -p 3001
 ```
