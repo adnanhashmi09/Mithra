@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import deployContract from '../../lib/deploy';
 import { ethers } from 'ethers';
-import Warranty from '../../../blockchain/artifacts/contracts/Warranty.sol/Warranty.json';
+import Warranty from '../../abi/Warranty.sol/Warranty.json';
 
 import toast from 'react-hot-toast';
 
