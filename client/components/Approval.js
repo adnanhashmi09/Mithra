@@ -1,13 +1,13 @@
-import React from 'react';
-import styles from '../styles/Approval.module.css';
-import Link from 'next/link';
-import Image from 'next/image';
+import React from "react";
+import styles from "../styles/Approval.module.css";
+import Link from "next/link";
+import Image from "next/image";
 
-import { checkWeb3, signMessage } from '../lib/checkWeb3';
-import { ethers } from 'ethers';
+import { checkWeb3, signMessage } from "../lib/checkWeb3";
+import { ethers } from "ethers";
 
-import Warranty from '../../blockchain/artifacts/contracts/Warranty.sol/Warranty.json';
-import toast from 'react-hot-toast';
+import Warranty from "../contract/Warranty.json";
+import toast from "react-hot-toast";
 
 function Approval({
   productId,
@@ -32,13 +32,13 @@ function Approval({
     console.log(response.error);
     if (response.error) {
       toast.error(
-        'Signature not valid. Please connect with your wallet and reload.'
+        "Signature not valid. Please connect with your wallet and reload."
       );
     }
 
-    const res = await fetch('http://localhost:5050/token/approve', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("http://localhost:5050/token/approve", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         productId: productId,
         ethAddress: response.address,
@@ -70,15 +70,15 @@ function Approval({
       console.log(response.error);
       if (response.error) {
         toast.error(
-          'Signature not valid. Please connect with your wallet and reload.'
+          "Signature not valid. Please connect with your wallet and reload."
         );
       }
 
       console.log(response);
 
-      const txnRsp = await fetch('http://localhost:5050/token/approve/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const txnRsp = await fetch("http://localhost:5050/token/approve/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           Approval: approval,
           productId: productId,
@@ -91,7 +91,7 @@ function Approval({
       console.log(dat);
       // setReload(!reload);
     } catch (error) {
-      toast.error('error');
+      toast.error("error");
       console.log(error);
     }
   };
@@ -109,7 +109,7 @@ function Approval({
       const txn = await contract.resale(tokenId, to);
       const prm = txn.wait();
 
-      contract.on('WarrantyCardMinted', (from, to, value, event) => {
+      contract.on("WarrantyCardMinted", (from, to, value, event) => {
         console.log({
           from: from,
           to: to,
@@ -121,10 +121,10 @@ function Approval({
       let txnData;
 
       await toast.promise(prm, {
-        loading: 'Transferring token',
+        loading: "Transferring token",
         success: (data) => {
           txnData = data;
-          return 'Token transferred successfully';
+          return "Token transferred successfully";
         },
         error: (err) => `Error: ${err}`,
       });
@@ -143,10 +143,10 @@ function Approval({
         });
       });
     } catch (error) {
-      if (error.message.includes('Warranty: token is not out for sale')) {
-        toast.error('Token is not out for sale');
+      if (error.message.includes("Warranty: token is not out for sale")) {
+        toast.error("Token is not out for sale");
       } else {
-        toast.error('error in transfer token');
+        toast.error("error in transfer token");
       }
     }
   };
@@ -171,7 +171,7 @@ function Approval({
         address: contractAddress,
         topics: [
           ethers.utils.id(
-            'WarrantyCardMinted(address, uint256, string, uint256)'
+            "WarrantyCardMinted(address, uint256, string, uint256)"
           ),
         ],
       };
@@ -182,10 +182,10 @@ function Approval({
       });
 
       await toast.promise(prm, {
-        loading: 'Minting Token...',
+        loading: "Minting Token...",
         success: (data) => {
           txnData = data;
-          return 'Token minted successfully';
+          return "Token minted successfully";
         },
         error: (err) => `Error: ${err}`,
       });
@@ -199,22 +199,22 @@ function Approval({
         resolve({ decoded_token_id, txnHash: txnData.transactionHash });
       });
     } catch (error) {
-      if (error.message.includes('Warranty: already minted')) {
-        toast('Token seems to be already minted\nTrying transfer.')
+      if (error.message.includes("Warranty: already minted")) {
+        toast("Token seems to be already minted\nTrying transfer.");
 
         const transaction = await transferTokenToNewUser(to);
         return new Promise((resolve, reject) => {
           resolve(transaction);
         });
       } else {
-        toast.error('error in mint token');
+        toast.error("error in mint token");
         console.log(error);
       }
     }
   };
 
   return (
-    <div className={`${styles.box} ${claim ? styles.claimed : ''}`}>
+    <div className={`${styles.box} ${claim ? styles.claimed : ""}`}>
       <div className={styles.imgdiv}>
         <img src={tokenUri} className={styles.image} />
       </div>
@@ -243,13 +243,13 @@ function Approval({
             </div>
           </div>
 
-          <div className={`${styles.warranty} ${claim ? styles.claimed : ''}`}>
-            <h5 style={{ color: '#ff48fa' }}>Warranty Claimed: </h5>
+          <div className={`${styles.warranty} ${claim ? styles.claimed : ""}`}>
+            <h5 style={{ color: "#ff48fa" }}>Warranty Claimed: </h5>
             <a href={`mailto:${email}`}>{email}</a>
           </div>
 
           <>
-            {tab === 'Pending' && (
+            {tab === "Pending" && (
               <div className={styles.submit}>
                 <button onClick={handleApproval}>Approve</button>
               </div>

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
-import { client, urlFor } from '../lib/client';
-import { useStateContext } from '../context/StateContext';
-import toast from 'react-hot-toast';
+import { client, urlFor } from "../lib/client";
+import { useStateContext } from "../context/StateContext";
+import toast from "react-hot-toast";
 
-import { signMessage } from '../lib/signMessage';
+import { signMessage } from "../lib/signMessage";
 
-import { ethers } from 'ethers';
-import Warranty from '../../../blockchain/artifacts/contracts/Warranty.sol/Warranty.json';
+import { ethers } from "ethers";
+import Warranty from "../contract/Warranty.json";
 
 const UserProduct = ({
   product: { image, name, contractAddress, price, _id },
@@ -41,10 +41,10 @@ const UserProduct = ({
       let txnData;
 
       await toast.promise(prm, {
-        loading: 'Putting up token for sale...',
+        loading: "Putting up token for sale...",
         success: (data) => {
           txnData = data;
-          return 'Token listed successfully';
+          return "Token listed successfully";
         },
         error: (err) => `Error: ${err}`,
       });
@@ -52,7 +52,7 @@ const UserProduct = ({
       console.log(txnData);
       return { txnData, error: null };
     } catch (error) {
-      toast.error('error');
+      toast.error("error");
       console.log(error);
       return { txnData: null, error };
     }
@@ -67,13 +67,13 @@ const UserProduct = ({
 
       const myPromise = productSold();
       await toast.promise(myPromise, {
-        loading: 'Listing in the market...',
-        success: 'Listed successfully',
-        error: 'Error ',
+        loading: "Listing in the market...",
+        success: "Listed successfully",
+        error: "Error ",
       });
       setReload(!reload);
     } catch (error) {
-      toast.error('error');
+      toast.error("error");
       console.log(error);
     }
 
@@ -91,7 +91,7 @@ const UserProduct = ({
     for (const el of mongoData.unapproved) {
       console.log(el.productId);
       if (el.productId === _id) {
-        console.log('found');
+        console.log("found");
         console.log(el);
         setToken(el);
         setIsUnapproved(true);
@@ -102,7 +102,7 @@ const UserProduct = ({
     for (const el of mongoData.approved) {
       console.log(el.productId);
       if (el.productId === _id) {
-        console.log('found');
+        console.log("found");
         console.log(el);
         setToken(el);
         break;
@@ -111,7 +111,7 @@ const UserProduct = ({
   });
   return (
     <div>
-      {console.log('--------------------------------')}
+      {console.log("--------------------------------")}
       {/* {console.log(isUnapproved)} */}
       <div className={`my-item`}>
         <div className="imageContainer">
@@ -148,7 +148,7 @@ const UserProduct = ({
               className="buy-now"
               onClick={handleResale}
               style={
-                !isUnapproved ? {} : { opacity: 0.3, cursor: 'not-allowed' }
+                !isUnapproved ? {} : { opacity: 0.3, cursor: "not-allowed" }
               }
             >
               Re-sell

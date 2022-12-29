@@ -1,5 +1,5 @@
 // Mock Review Comment
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from "react";
 
 // function [slug]() {
 //   return (
@@ -8,20 +8,20 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 // }
 
 // export default [slug]
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 
-import { useRouter } from 'next/router';
-import Navbar from '../../components/Navbar';
-import styles from '../../styles/Nftpage.module.css';
+import { useRouter } from "next/router";
+import Navbar from "../../components/Navbar";
+import styles from "../../styles/Nftpage.module.css";
 
-import Footer from '../../components/Footer';
-import Image from 'next/image';
-import Head from 'next/head';
+import Footer from "../../components/Footer";
+import Image from "next/image";
+import Head from "next/head";
 
-import { ethers } from 'ethers';
-import Warranty from '../../../blockchain/artifacts/contracts/Warranty.sol/Warranty.json';
-import { useStateContext } from '../../context/stateContext';
-import { signOwnerMessage } from '../../lib/checkWeb3';
+import { ethers } from "ethers";
+import Warranty from "../../contract/Warranty.json";
+import { useStateContext } from "../../context/stateContext";
+import { signOwnerMessage } from "../../lib/checkWeb3";
 
 const Slug = () => {
   const router = useRouter();
@@ -38,17 +38,17 @@ const Slug = () => {
 
   const toggleClaim = async () => {
     try {
-      if (brandAddress == '') {
-        toast.error('Please connect with your wallet.');
+      if (brandAddress == "") {
+        toast.error("Please connect with your wallet.");
         return;
       }
       const response = await signOwnerMessage(slug, brandAddress);
       const { signature, address: signedAddress } = response;
       console.log(response);
 
-      const res = await fetch('http://localhost:5050/token/claim', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("http://localhost:5050/token/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           verifyOwner: true,
           signature: signature,
@@ -59,14 +59,14 @@ const Slug = () => {
       });
 
       if (!res.ok) {
-        throw Error('Error!');
+        throw Error("Error!");
       }
 
       const data = await res.json();
       setClaimed(!claimed);
     } catch (error) {
       console.log(error);
-      toast.error('Error!');
+      toast.error("Error!");
     }
   };
 
@@ -74,10 +74,10 @@ const Slug = () => {
     if (!slug) return;
     (async () => {
       try {
-        const response = await fetch('http://localhost:5050/token/single', {
-          method: 'POST',
+        const response = await fetch("http://localhost:5050/token/single", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ productId: slug }),
         });
@@ -109,12 +109,12 @@ const Slug = () => {
           provider
         );
 
-        if (data.minter != '') {
+        if (data.minter != "") {
           const checkWarranty = await contract.checkIfWarrantyIsOver(
             data.tokenId
           );
           const temp = ethers.BigNumber.from(checkWarranty).toNumber();
-          console.log('check warranty', temp / (60 * 60 * 24));
+          console.log("check warranty", temp / (60 * 60 * 24));
 
           // round number to 1 decimal place
           const roundedData = Math.round((temp / (60 * 60 * 24)) * 10) / 10;
@@ -126,18 +126,18 @@ const Slug = () => {
         if (data.tokenId) {
           const startTime = await contract.getStartTime(data.tokenId);
           console.log(
-            'start time',
+            "start time",
             ethers.BigNumber.from(startTime).toNumber()
           );
           const length = await contract.getWarrantyLength(data.tokenId);
-          console.log('length time', ethers.BigNumber.from(length).toNumber());
+          console.log("length time", ethers.BigNumber.from(length).toNumber());
           const blockTime = await contract.getBlockTimestamp();
           console.log(
-            'block time',
+            "block time",
             ethers.BigNumber.from(blockTime).toNumber()
           );
         }
-        console.log('token id', product.tokenId);
+        console.log("token id", product.tokenId);
 
         // const seconds = ethers.BigNumber.from(checkWarranty).toNumber();
         setClaimed(data.claim);
@@ -146,10 +146,10 @@ const Slug = () => {
       } catch (error) {
         setIsValid(false);
         console.log(error);
-        toast.error('Invalid product Id', { duration: 800 });
-        toast.loading('Redirecting...', { duration: 1000 });
+        toast.error("Invalid product Id", { duration: 800 });
+        toast.loading("Redirecting...", { duration: 1000 });
         setTimeout(() => {
-          router.push('/warranty');
+          router.push("/warranty");
         }, 1500);
       }
     })();
@@ -193,8 +193,8 @@ const Slug = () => {
                   <h5>Minter</h5>
                   <div className={styles.verify}>
                     <p>
-                      {product.minter == ''
-                        ? 'Warranty card not minted yet'
+                      {product.minter == ""
+                        ? "Warranty card not minted yet"
                         : product.brand}
                     </p>
                   </div>
@@ -216,22 +216,22 @@ const Slug = () => {
                     onClick={() => {
                       toggleClaim();
                     }}
-                    disabled={product.minter == '' ? true : false}
+                    disabled={product.minter == "" ? true : false}
                     style={
-                      product.minter == ''
+                      product.minter == ""
                         ? {
-                            display: 'none',
-                            marginTop: '10px',
-                            cursor: 'pointer',
+                            display: "none",
+                            marginTop: "10px",
+                            cursor: "pointer",
                           }
                         : {
-                            display: 'block',
-                            marginTop: '10px',
-                            cursor: 'pointer',
+                            display: "block",
+                            marginTop: "10px",
+                            cursor: "pointer",
                           }
                     }
                   >
-                    {claimed ? 'Resolve claim' : 'Claim warranty'}
+                    {claimed ? "Resolve claim" : "Claim warranty"}
                   </button>
                 </div>
               </div>
