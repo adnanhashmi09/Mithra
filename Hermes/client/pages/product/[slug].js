@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   AiOutlineMinus,
   AiOutlinePlus,
   AiFillStar,
   AiOutlineStar,
-} from 'react-icons/ai';
+} from "react-icons/ai";
 
-import { client, urlFor } from '../../lib/client';
-import { Product } from '../../components';
-import toast from 'react-hot-toast';
-import getStripe from '../../lib/getStripe';
-import { useStateContext } from '../../context/StateContext';
-import useCheckWeb3Support from '../../hooks/checkWeb3Support';
+import { client, urlFor } from "../../lib/client";
+import { Product } from "../../components";
+import toast from "react-hot-toast";
+import getStripe from "../../lib/getStripe";
+import { useStateContext } from "../../context/StateContext";
+import useCheckWeb3Support from "../../hooks/checkWeb3Support";
 
-import { signMessage } from '../../lib/signMessage';
-import { ethers } from 'ethers';
+import { signMessage } from "../../lib/signMessage";
+import { ethers } from "ethers";
 
 const styles = {
-  position: 'absolute',
-  top: '90%',
-  left: '80%',
-  transform: 'rotate(-0deg) translate(-50%, -50%)',
-  fontWeight: 'bold',
-  fontSize: '50px',
-  color: '#c50f0f',
-  display: 'block',
+  position: "absolute",
+  top: "90%",
+  left: "80%",
+  transform: "rotate(-0deg) translate(-50%, -50%)",
+  fontWeight: "bold",
+  fontSize: "50px",
+  color: "#c50f0f",
+  display: "block",
 };
 
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price, sold } = product;
   const [index, setIndex] = useState(0);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const { qty, address } = useStateContext();
 
   console.log(sold);
@@ -49,14 +49,14 @@ const ProductDetails = ({ product, products }) => {
     strLength = strLength || 5;
     charSet =
       charSet ||
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     while (strLength--) {
       // (note, fixed typo)
       result.push(charSet.charAt(Math.floor(Math.random() * charSet.length)));
     }
 
-    return result.join('');
+    return result.join("");
   }
 
   useEffect(() => {
@@ -67,14 +67,14 @@ const ProductDetails = ({ product, products }) => {
   const initApproval = async (emailAddress, product) => {
     const img = product.image[0].asset._ref;
     const newImage = img
-      .replace('image-', 'https://cdn.sanity.io/images/50pnuw2c/production/')
-      .replace('-webp', '.webp');
+      .replace("image-", "https://cdn.sanity.io/images/50pnuw2c/production/")
+      .replace("-webp", ".webp");
 
     const today = new Date();
     const date = String(
       `${today.getDate()}.${String(today.getMonth() + 1).padStart(
         2,
-        '0'
+        "0"
       )}.${today.getFullYear()}`
     );
 
@@ -93,7 +93,7 @@ const ProductDetails = ({ product, products }) => {
       email: emailAddress,
       saleDate: date,
       approval: {
-        event: 'transfer',
+        event: "transfer",
         date: date,
         from: product.owner,
         to: address,
@@ -104,9 +104,9 @@ const ProductDetails = ({ product, products }) => {
 
     console.log(body);
 
-    const resp = await fetch('http://localhost:5050/token/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const resp = await fetch("http://20.198.2.124:5050/token/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
 
@@ -114,8 +114,8 @@ const ProductDetails = ({ product, products }) => {
   };
 
   const handleBuyNow = async () => {
-    if (address === '') {
-      toast.error('please connect to metamask');
+    if (address === "") {
+      toast.error("please connect to metamask");
       return;
     }
 
@@ -124,51 +124,51 @@ const ProductDetails = ({ product, products }) => {
     const prm = signMessage(address);
 
     await toast.promise(prm, {
-      loading: 'Loading...',
+      loading: "Loading...",
       success: (data) => {
-        return 'Transaction signed successfully';
+        return "Transaction signed successfully";
       },
-      error: 'Transaction failed',
+      error: "Transaction failed",
     });
 
     const sanityPromise = productSold();
 
     await toast.promise(sanityPromise, {
-      loading: 'Initiating Transaction...',
-      success: 'Transaction initiated successfully',
-      error: ' Transaction failed',
+      loading: "Initiating Transaction...",
+      success: "Transaction initiated successfully",
+      error: " Transaction failed",
     });
     initApproval(email, product);
-    
-     // const stripe = await getStripe();
-     // const gas = 70;
-     // const response = await fetch('/api/stripe', {
-       // method: 'POST',
-       // headers: {
-         // 'Content-Type': 'application/json',
-       // },
-       // body: JSON.stringify([{ product, qty, gas }]),
-     // });
 
-     // if (response.statusCode === 500) return;
+    // const stripe = await getStripe();
+    // const gas = 70;
+    // const response = await fetch('/api/stripe', {
+    // method: 'POST',
+    // headers: {
+    // 'Content-Type': 'application/json',
+    // },
+    // body: JSON.stringify([{ product, qty, gas }]),
+    // });
 
-     // const data = await response.json();
+    // if (response.statusCode === 500) return;
 
-     // toast.loading('Redirecting...');
+    // const data = await response.json();
 
-     // stripe.redirectToCheckout({ sessionId: data.id });
+    // toast.loading('Redirecting...');
+
+    // stripe.redirectToCheckout({ sessionId: data.id });
   };
 
   return (
     <div>
       <div className="product-detail-container">
-        <div className={`leftImages ${sold ? 'sold' : ''}`}>
+        <div className={`leftImages ${sold ? "sold" : ""}`}>
           <div className="image-container">
             <img
               src={urlFor(image && image[index])}
               className="product-detail-image"
             />
-            <span style={sold ? styles : { display: 'none' }}>SOLD</span>
+            <span style={sold ? styles : { display: "none" }}>SOLD</span>
           </div>
           <div className="small-images-container">
             {image?.map((item, i) => (
@@ -176,7 +176,7 @@ const ProductDetails = ({ product, products }) => {
                 key={i}
                 src={urlFor(item)}
                 className={
-                  i === index ? 'small-image selected-image' : 'small-image'
+                  i === index ? "small-image selected-image" : "small-image"
                 }
                 onMouseEnter={() => setIndex(i)}
               />
@@ -198,15 +198,21 @@ const ProductDetails = ({ product, products }) => {
           </div>
           <h4>Details: </h4>
           <p>{details}</p>
-          <p className="price">₹ {price} <span 
-          style={{
-            fontSize: '1rem',
-            color: 'black'
-            }}>(exclusive of warranty charges)</span></p>
+          <p className="price">
+            ₹ {price}{" "}
+            <span
+              style={{
+                fontSize: "1rem",
+                color: "black",
+              }}
+            >
+              (exclusive of warranty charges)
+            </span>
+          </p>
 
           <div
             className="buttons"
-            style={sold ? { opacity: 0.3, pointerEvents: 'none' } : {}}
+            style={sold ? { opacity: 0.3, pointerEvents: "none" } : {}}
           >
             <input
               type="text"
@@ -256,7 +262,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 };
 

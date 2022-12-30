@@ -136,7 +136,7 @@ const UserProduct = ({
             )}
           </p>
           <a
-            href={`http://localhost:3000/warranty/${_id}`}
+            href={`http://20.198.2.124:3000/warranty/${_id}`}
             className="product-address"
           >
             {_id}

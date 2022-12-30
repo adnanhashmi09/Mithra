@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { client } from '../lib/client';
-import { UserProduct, FooterBanner, HeroBanner } from '../components';
+import { client } from "../lib/client";
+import { UserProduct, FooterBanner, HeroBanner } from "../components";
 
-import { useStateContext } from '../context/StateContext';
-import useCheckWeb3Support from '../hooks/checkWeb3Support';
+import { useStateContext } from "../context/StateContext";
+import useCheckWeb3Support from "../hooks/checkWeb3Support";
 
 function myItems() {
   const { address } = useStateContext();
@@ -14,7 +14,7 @@ function myItems() {
   useCheckWeb3Support();
 
   useEffect(async () => {
-    if (address !== '') {
+    if (address !== "") {
       const query = `*[_type == "product" && owner == "${address}" && sold == true]`;
       const items = await client.fetch(query);
       setProducts(items);
@@ -22,9 +22,9 @@ function myItems() {
     }
 
     try {
-      const res = await fetch('http://localhost:5050/token/owner/all', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("http://20.198.2.124:5050/token/owner/all", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ owner: address }),
       });
 
@@ -38,15 +38,15 @@ function myItems() {
 
   return (
     <div>
-      {address === '' ? (
+      {address === "" ? (
         <>
-          <h1 style={{ textAlign: 'center', marginBottom: '80px' }}>
+          <h1 style={{ textAlign: "center", marginBottom: "80px" }}>
             Please connect to your metamask wallet to view your items.
           </h1>
         </>
       ) : (
         <>
-          <h1 style={{ textAlign: 'center', marginBottom: '80px' }}>
+          <h1 style={{ textAlign: "center", marginBottom: "80px" }}>
             My Products
           </h1>
           <div className="my-item-container">
