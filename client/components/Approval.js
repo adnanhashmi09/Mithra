@@ -36,7 +36,7 @@ function Approval({
       );
     }
 
-    const res = await fetch("http://localhost:5050/token/approve", {
+    const res = await fetch("http://20.198.2.124:5050/token/approve", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -76,7 +76,7 @@ function Approval({
 
       console.log(response);
 
-      const txnRsp = await fetch("http://localhost:5050/token/approve/add", {
+      const txnRsp = await fetch("http://20.198.2.124:5050/token/approve/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

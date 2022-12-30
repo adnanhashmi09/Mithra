@@ -1,21 +1,21 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import Navbar from '../../../components/Navbar';
-import styles from '../../../styles/Dashboard.module.css';
-import Image from 'next/image';
-import Footer from '../../../components/Footer';
-import Link from 'next/link';
-import Approval from '../../../components/Approval';
-import Head from 'next/head';
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import Navbar from "../../../components/Navbar";
+import styles from "../../../styles/Dashboard.module.css";
+import Image from "next/image";
+import Footer from "../../../components/Footer";
+import Link from "next/link";
+import Approval from "../../../components/Approval";
+import Head from "next/head";
 
-import { useStateContext } from '../../../context/stateContext';
-import { checkWeb3, signMessage } from '../../../lib/checkWeb3';
-import toast from 'react-hot-toast';
+import { useStateContext } from "../../../context/stateContext";
+import { checkWeb3, signMessage } from "../../../lib/checkWeb3";
+import toast from "react-hot-toast";
 
 function Admin() {
-  const [tab, setTab] = useState('Pending');
+  const [tab, setTab] = useState("Pending");
   const [valid, setValid] = useState(false);
   const [products, setProducts] = useState({ Approved: [], Pending: [] });
-  const [brand, setBrand] = useState('');
+  const [brand, setBrand] = useState("");
   const [reload, setReload] = useState(false);
   const handleSelect = (e) => {
     setTab(e.target.value);
@@ -26,19 +26,19 @@ function Admin() {
 
     // return;
     (async () => {
-      if (brandAddress !== '') {
+      if (brandAddress !== "") {
         const response = await signMessage(brandAddress);
 
         console.log(response.error);
         if (response.error) {
           toast.error(
-            'Signature not valid. Please connect with your wallet and reload.'
+            "Signature not valid. Please connect with your wallet and reload."
           );
         }
 
-        const res = await fetch('http://localhost:5050/token/all', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("http://20.198.2.124/:5050/token/all", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ethAddress: response.address,
             signature: response.signature,
@@ -64,15 +64,15 @@ function Admin() {
       </Head>
       <div className={styles.container}>
         <Navbar underline="dashboard" />
-        {brandAddress === '' && (
+        {brandAddress === "" && (
           <>
-            <h1 style={{ textAlign: 'center', marginTop: '10rem' }}>
+            <h1 style={{ textAlign: "center", marginTop: "10rem" }}>
               Please connect to your wallet
             </h1>
           </>
         )}
 
-        {brandAddress !== '' && (
+        {brandAddress !== "" && (
           <div className={styles.main}>
             <h1>
               <span>{brand}</span> Admin Dashboard
@@ -80,20 +80,20 @@ function Admin() {
             <div className={styles.tabs}>
               <div
                 onClick={(e) => {
-                  setTab('Approved');
+                  setTab("Approved");
                 }}
                 className={`${styles.tab} ${
-                  tab == 'Approved' ? styles.active : ''
+                  tab == "Approved" ? styles.active : ""
                 }`}
               >
                 Approved
               </div>
               <div
                 onClick={(e) => {
-                  setTab('Pending');
+                  setTab("Pending");
                 }}
                 className={`${styles.tab} ${
-                  tab == 'Pending' ? styles.active : ''
+                  tab == "Pending" ? styles.active : ""
                 }`}
               >
                 Pending

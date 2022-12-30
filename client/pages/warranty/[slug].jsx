@@ -46,7 +46,7 @@ const Slug = () => {
       const { signature, address: signedAddress } = response;
       console.log(response);
 
-      const res = await fetch("http://localhost:5050/token/claim", {
+      const res = await fetch("http://20.198.2.124:5050/token/claim", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -74,7 +74,7 @@ const Slug = () => {
     if (!slug) return;
     (async () => {
       try {
-        const response = await fetch("http://localhost:5050/token/single", {
+        const response = await fetch("http://20.198.2.124:5050/token/single", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

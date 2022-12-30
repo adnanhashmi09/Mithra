@@ -1,20 +1,20 @@
-import Head from 'next/head';
-import styles from '../../styles/Warranty.module.css';
-import Link from 'next/link';
-import Navbar from '../../components/Navbar';
-import Image from 'next/image';
-import Arrow from '../../assets/Arrow 2.png';
-import Footer from '../../components/Footer';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import Head from "next/head";
+import styles from "../../styles/Warranty.module.css";
+import Link from "next/link";
+import Navbar from "../../components/Navbar";
+import Image from "next/image";
+import Arrow from "../../assets/Arrow 2.png";
+import Footer from "../../components/Footer";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 function warranty() {
-  const [walletAddress, setWalletAddress] = useState('');
-  const [date, setDate] = useState('');
-  const [productName, setProductName] = useState('');
-  const [productId, setProductId] = useState('');
+  const [walletAddress, setWalletAddress] = useState("");
+  const [date, setDate] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productId, setProductId] = useState("");
 
   const router = useRouter();
 
@@ -23,25 +23,25 @@ function warranty() {
 
     let body;
 
-    if (productId !== '') {
+    if (productId !== "") {
       body = JSON.stringify({ productId });
-    } else if (productName !== '' && walletAddress !== '' && date !== '') {
+    } else if (productName !== "" && walletAddress !== "" && date !== "") {
       body = JSON.stringify({
         name: productName,
         owner: walletAddress,
         saleDate: date,
       });
     } else {
-      toast.error('Please fill in all fields correctly');
+      toast.error("Please fill in all fields correctly");
       return;
     }
 
     console.log(body);
 
-    const response = await fetch('http://localhost:5050/token/single', {
-      method: 'POST',
+    const response = await fetch("http://20.198.2.124:5050/token/single", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: body,
     });
@@ -50,7 +50,7 @@ function warranty() {
       const data = await response.json();
       router.push(`/warranty/${data.productId}`);
     } else {
-      toast.error('Entry not found');
+      toast.error("Entry not found");
     }
   };
 

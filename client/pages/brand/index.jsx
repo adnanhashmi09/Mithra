@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import styles from '../../styles/Brand.module.css';
-import Image from 'next/image';
-import Footer from '../../components/Footer';
-import Link from 'next/link';
-import Head from 'next/head';
-import deployContract from '../../lib/deploy';
-import { ethers } from 'ethers';
-import Warranty from '../../abi/Warranty.sol/Warranty.json';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import styles from "../../styles/Brand.module.css";
+import Image from "next/image";
+import Footer from "../../components/Footer";
+import Link from "next/link";
+import Head from "next/head";
+import deployContract from "../../lib/deploy";
+import { ethers } from "ethers";
+import Warranty from "../../abi/Warranty.sol/Warranty.json";
 
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 // 0x73eD400D15d4271F653C9de252125A158e5Fbded
 
@@ -32,10 +32,10 @@ function brand() {
   //   foo();
   // });
 
-  const [brandName, setBrandName] = useState('');
-  const [tokenSymbol, setTokenSymbol] = useState('');
-  const [tokenName, setTokenName] = useState('');
-  const [email, setEmail] = useState('');
+  const [brandName, setBrandName] = useState("");
+  const [tokenSymbol, setTokenSymbol] = useState("");
+  const [tokenName, setTokenName] = useState("");
+  const [email, setEmail] = useState("");
 
   const deploy = async (e) => {
     e.preventDefault();
@@ -45,13 +45,13 @@ function brand() {
     let WarrantyContract;
 
     await toast.promise(myPromise, {
-      loading: 'Loading',
+      loading: "Loading",
       success: (data) => {
         WarrantyContract = data.contract;
         address = data.address;
         return `Successfully deployed ${data.contract.address}`;
       },
-      error: 'Error when fetching',
+      error: "Error when fetching",
     });
 
     // const { contract: WarrantyContract, address } = data;
@@ -63,10 +63,10 @@ function brand() {
     //TODO: add a toast message
 
     const response = await fetch(
-      `http://localhost:5050/brand/init/${address}`,
+      `http://20.198.2.124:5050/brand/init/${address}`,
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ethAddress: address,
           name: brandName,
@@ -81,10 +81,10 @@ function brand() {
     console.log(response);
     console.log(symbol);
 
-    setBrandName('');
-    setTokenName('');
-    setTokenName('');
-    setEmail('');
+    setBrandName("");
+    setTokenName("");
+    setTokenName("");
+    setEmail("");
   };
 
   // useEffect(() => {
