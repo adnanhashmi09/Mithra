@@ -36,7 +36,7 @@ function Admin() {
           );
         }
 
-        const res = await fetch("http://20.198.2.124/:5050/token/all", {
+        const res = await fetch("http://20.198.2.124:5050/token/all", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
